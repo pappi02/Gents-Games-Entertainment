@@ -8,7 +8,7 @@ export function publicImageUrl(bucket: string, path: string) {
   // Build a public URL without a network round-trip — the game-media
   // bucket's SELECT policy is public (docs/PHASE_3_STATUS.md), so this URL
   // format is stable and doesn't need a signed token.
-  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+  return `${process.env.NEXT_SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
 }
 
 /** First image (by sort_order) from a `game_media` embed, or null when there is none. */

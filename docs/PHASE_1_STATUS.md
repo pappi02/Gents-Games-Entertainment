@@ -31,7 +31,7 @@ Tracks [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) Phase 1 against what's a
 - [ ] **Choose a transactional email provider** for enquiry notifications (e.g. Resend, Postmark) and get an API key — needed before Phase 5 enquiry flow, not Phase 1 itself.
 - [ ] **Create the Sentry project** and drop its DSN/org/project/auth-token into `.env.local`.
 - [ ] **Create the Vercel project**, connect this repo, and add the Supabase + Sentry env vars as Vercel project secrets.
-- [ ] **Add CI secrets** (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) in the GitHub repo settings so the CI build step can run against real values.
+- [ ] **Add CI secrets** (`NEXT_SUPABASE_URL`, `NEXT_SUPABASE_ANON_KEY`) in the GitHub repo settings so the CI build step can run against real values.
 - [ ] **Fix the git repository scope** — `git rev-parse --show-toplevel` currently resolves to the whole Windows user profile (`C:\Users\cent$`), not this project folder. Flagged separately; needs a decision before any commit happens (and before a Vercel/GitHub connection is wired up).
 
 ## Exit condition (per IMPLEMENTATION_PLAN.md)

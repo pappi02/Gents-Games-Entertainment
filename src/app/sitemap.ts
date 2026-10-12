@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
  * in the sitemap. See docs/TESTING.md §6.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const siteUrl = process.env.NEXT_SITE_URL ?? "http://localhost:3000";
   const supabase = await createClient();
 
   // No individual /events/[slug] route exists yet (see docs/PHASE_6_STATUS.md

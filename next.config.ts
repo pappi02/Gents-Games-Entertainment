@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs/config";
 
-const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+const supabaseHostname = process.env.NEXT_SUPABASE_URL
+  ? new URL(process.env.NEXT_SUPABASE_URL).hostname
   : undefined;
 
 const nextConfig: NextConfig = {
