@@ -17,6 +17,10 @@ export default async function AdminCategoriesPage({
     <div>
       <h1>Categories</h1>
       {error && <p className="admin-auth-error">{error}</p>}
+      <p className="admin-section-note">
+        A published category only appears on the public site once it holds at least one published, confirmed game —
+        publishing an empty one is safe, it just stays hidden.
+      </p>
 
       <table className="admin-table">
         <thead>

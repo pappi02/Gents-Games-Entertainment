@@ -227,3 +227,15 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.admin-hint {
+  margin: 0;
+  color: #555;
+  font-size: 0.8rem;
+}
+
+.admin-section-note {
+  color: #555;
+  font-size: 0.9rem;
+  max-width: 70ch;
+}

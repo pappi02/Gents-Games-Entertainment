@@ -84,3 +84,27 @@ These are implementation defaults, not a universal standard — fluid sizing bet
 - No colour-only status indication.
 - Accessible touch target sizes and spacing.
 - Alt text for meaningful images; empty alt for decorative images.
+
+## 11. Implementation (October 2026 redesign)
+
+Where the system above lives in code — change it here rather than per page.
+
+- **Tokens:** `src/app/globals.css` — palette (ink/stone/paper/red), fluid type scale `--step--2…--step-5`, spacing `--space-1…9`, `--section-y`, `--gutter`, `--content-max`, radii, shadows, motion.
+- **Surfaces:** every section declares `.theme-light`, `.theme-paper`, or `.theme-dark` (`src/app/(public)/public.css`), which sets semantic properties (`--surface`, `--text`, `--text-muted`, `--border`, `--accent-text`, `--status-*`). Components only consume the semantic ones, so a card or badge is correct on any surface. Accent red text on dark uses `--color-red-300` for AA contrast.
+- **Type:** Archivo (variable, `wdth` axis) for display and body — `.display` is the condensed uppercase cut; Instrument Serif italic (`.accent-serif`) for one accent word per heading at most.
+- **Components** (`src/app/(public)/_components/`): `SiteHeader`/`MainNav` (desktop links + mobile disclosure menu), `SiteFooter`, `PageIntro` (every inner page's h1), `GameCard` (the only game card), `StatusBadge` (label + distinct glyph per state), `Breadcrumbs` (+ BreadcrumbList JSON-LD), `ContactActions`, `Icon` (inline SVG set — no icon dependency).
+- **Facility status copy:** `src/lib/public/status.ts` is the single source for labels and explanations.
+- **Placeholder imagery:** any image whose `media_assets.is_placeholder` isn't explicitly `false` gets an "Illustrative photo" tag; the static lounge image is always tagged "Illustrative image".
+- **Image ratios:** cards 4:3, hero 4:5 (desktop) / 4:3 (mobile), category thumbnails 3:2, venue gallery 16:9 lead + 4:3.
+
+### Motion
+
+All motion lives in `src/app/(public)/motion.css` — no animation library.
+
+- **Timing:** `--dur-fast` 140ms (press/hover feedback), `--dur-base` 240ms (state changes), `--dur-slow` 600ms (entrances); `--ease-out` for arrivals, `--ease-spring` for presses and pops, `--stagger` 70ms between siblings.
+- **Entrances:** home hero (masked headline lines, copy, CTAs done by ~950ms; photo settles from a slight scale), detail-page summary (`.enter-stagger`). Animations run *from* a hidden state *to* the normal one, so nothing depends on JS to become visible.
+- **Scroll:** `.reveal` / `.reveal-group` use CSS scroll-driven animations (`animation-timeline: view()`); browsers without support simply show the content. The hero photo drift and the game-name ticker are scroll-linked, not looping.
+- **Route & filter transitions:** React `<ViewTransition>` — `PageTransition` in each page (fade out 120ms / fade-rise in), catalogue cards glide/scale on filter changes, card photo morphs into the game page hero (`gameImageTransitionName`). The header is excluded so it never moves.
+- **Game geometry:** per-category glyphs (`CategoryGlyph`) move once on hover/focus; the hero "bank shot" draws once on desktop only (its properties can't be composited).
+- **Reduced motion:** `globals.css` zeroes durations *and delays*; `motion.css` additionally removes scroll-driven and transform-based movement and view-transition animation. The game picker skips its shuffle.
+- **Don'ts:** no infinite loops, no scroll hijacking, no cursor effects, no animating layout properties.

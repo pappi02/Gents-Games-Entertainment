@@ -1,0 +1,611 @@
+/* Motion system — every animation on the public site lives here.
+
+   Rules of the house:
+   - Motion directs attention or confirms a state change; nothing loops forever.
+   - transform / opacity only (plus one-shot SVG stroke draws on tiny elements).
+   - Nothing is hidden by default: entrances use `both` fill from a visible end
+     state, scroll reveals are pure CSS (no JS observer that could leave
+     content invisible), and everything collapses under prefers-reduced-motion.
+   Timing tokens: --dur-fast (140ms) feedback · --dur-base (240ms) state ·
+   --dur-slow (600ms) entrances · --ease-out for arrivals, --ease-spring for
+   presses and pops. */
+
+:root {
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --stagger: 70ms;
+}
+
+/* ── Buttons: lift on hover, press on active ───────────────────────────── */
+
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 10px 24px -12px rgb(184 32 46 / 0.75);
+  }
+
+  .btn:hover > svg:last-child:not(:first-child) {
+    transform: translateX(3px);
+  }
+}
+
+.btn > svg {
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.btn:active:not([disabled]) {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 60ms;
+}
+
+.chip:active,
+.menu-button:active,
+.arrow-link:active {
+  transform: scale(0.96);
+}
+
+.chip,
+.menu-button,
+.arrow-link {
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+/* ── Hero entrance ─────────────────────────────────────────────────────── */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+}
+
+@keyframes line-up {
+  from { transform: translateY(105%); }
+}
+
+@keyframes settle {
+  from { transform: scale(1.14); }
+}
+
+@keyframes grow-y {
+  from { transform: scaleY(0); }
+}
+
+@keyframes card-up {
+  from { opacity: 0; transform: translateY(32px) rotate(-2deg); }
+}
+
+/* Headline lines slide up from behind a mask. The CTA row arrives by
+   ~350ms so the main action is never held back by the sequence. */
+.home-hero-copy h1 .line {
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.home-hero-copy h1 .line > span {
+  display: inline-block;
+  animation: line-up var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.home-hero-copy .eyebrow,
+.home-hero-copy .lede,
+.home-hero-copy .btn-row {
+  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.home-hero-visual .media.main img {
+  animation: settle 1.4s var(--ease-out) both;
+}
+
+.home-hero-visual::before {
+  transform-origin: top;
+  animation: grow-y 900ms var(--ease-out) 300ms both;
+}
+
+.hero-inset {
+  animation: card-up 700ms var(--ease-spring) 420ms both;
+}
+
+/* Restrained parallax on the hero photo — desktop only, scroll-linked (no JS),
+   and only where the browser supports scroll-driven animations. */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    @keyframes drift {
+      to { transform: translateY(7%); }
+    }
+
+    .home-hero-visual .media.main {
+      animation: drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+  }
+}
+
+/* ── "Bank shot": one-shot pool geometry behind the hero copy ─────────── */
+
+.bank-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--color-paper);
+  opacity: 0.09;
+  z-index: 0;
+}
+
+.home-hero > .container { position: relative; z-index: 1; }
+
+/* stroke-dashoffset / offset-distance can't run on the compositor, so the
+   flourish is desktop-only: on phones the repaint isn't worth it. */
+@media (max-width: 899px) {
+  .bank-shot { display: none; }
+}
+
+.bank-shot .shot-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: draw 1.8s var(--ease-in-out) 500ms both;
+}
+
+.bank-shot .shot-ball {
+  offset-path: path("M 40 520 L 520 120 L 900 470 L 1180 300");
+  offset-rotate: 0deg;
+  offset-distance: 100%;
+  animation: roll 1.8s var(--ease-in-out) 500ms both;
+}
+
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+}
+
+@keyframes roll {
+  from { offset-distance: 0%; }
+}
+
+/* ── Scroll-linked ticker of real game names ───────────────────────────── */
+
+.ticker {
+  overflow: hidden;
+  padding-block: clamp(var(--space-5), 4vw, var(--space-7));
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+
+.ticker-track {
+  display: flex;
+  gap: 0.5em;
+  width: max-content;
+  font-size: clamp(2.5rem, 1.5rem + 5vw, 6.5rem);
+  font-variation-settings: "wdth" 72;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border-strong);
+}
+
+.ticker-track .dot {
+  color: var(--color-red-600);
+  -webkit-text-stroke: 0;
+}
+
+.ticker-track .solid {
+  color: var(--text);
+  -webkit-text-stroke: 0;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes ticker-slide {
+      from { transform: translateX(0); }
+      to { transform: translateX(-30%); }
+    }
+
+    .ticker-track {
+      animation: ticker-slide linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+
+/* ── Scroll reveals (pure CSS; content is fully visible without support) ─ */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(28px); }
+    }
+
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    /* Siblings in a group land one after another as they enter. */
+    .reveal-group > * {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    .reveal-group > :nth-child(2) { animation-range: entry 8% entry 78%; }
+    .reveal-group > :nth-child(3) { animation-range: entry 16% entry 86%; }
+    .reveal-group > :nth-child(4) { animation-range: entry 22% entry 92%; }
+  }
+}
+
+/* ── Game cards ────────────────────────────────────────────────────────── */
+
+.game-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2;
+  background: var(--color-red-600);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .game-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .game-card:hover::before { transform: scaleX(1); }
+}
+
+/* Keyboard focus gets the same feedback as hover. */
+.game-card:focus-within {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.game-card:focus-within::before { transform: scaleX(1); }
+.game-card:focus-within .media img { transform: scale(1.04); }
+
+/* Touch: a quick press-in instead of hover. */
+.game-card:active {
+  transform: scale(0.985);
+  transition-duration: 80ms;
+}
+
+/* ── Category glyphs: a small move on hover/focus, never on loop ───────── */
+
+.glyph {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  color: var(--accent-text);
+  overflow: visible;
+}
+
+.glyph * {
+  transition: transform 420ms var(--ease-spring), opacity var(--dur-base);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.glyph-cue { transform-origin: 100% 0%; }
+.glyph-dart { transform-origin: 0% 100%; }
+
+.category-row:hover .glyph-ball,
+.category-row:focus-within .glyph-ball,
+.chip:hover .glyph-ball { transform: translate(5px, -4px); }
+
+.category-row:hover .glyph-cue,
+.category-row:focus-within .glyph-cue,
+.chip:hover .glyph-cue { transform: translate(4px, -3px); }
+
+.category-row:hover .glyph-piece,
+.category-row:focus-within .glyph-piece,
+.chip:hover .glyph-piece { transform: translate(-9px, -10px); }
+
+.category-row:hover .glyph-square,
+.category-row:focus-within .glyph-square { opacity: 0.4; }
+
+.category-row:hover .glyph-dart,
+.category-row:focus-within .glyph-dart,
+.chip:hover .glyph-dart { transform: translate(-4px, 4px); }
+
+.category-row:hover .glyph-ring,
+.category-row:focus-within .glyph-ring { transform: scale(1.15); }
+
+.category-row:hover .glyph-die,
+.category-row:focus-within .glyph-die,
+.chip:hover .glyph-die { transform: rotate(90deg); }
+
+.category-row:active { transform: scale(0.99); }
+
+.category-row .category-name {
+  transition: color var(--dur-fast), transform var(--dur-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .category-row:hover .category-name { transform: translateX(6px); }
+}
+
+.category-row:focus-within .category-name { transform: translateX(6px); }
+
+/* ── Mobile menu: links stagger in on open ─────────────────────────────── */
+
+.mobile-menu li {
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+
+@starting-style {
+  .mobile-menu li {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+.menu-button svg {
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.menu-button[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+/* ── Pending feedback ──────────────────────────────────────────────────── */
+
+.is-pending {
+  opacity: 0.6;
+  transition: opacity var(--dur-base) var(--ease-out) 120ms;
+}
+
+/* ── View transitions (React <ViewTransition>, no library) ─────────────── */
+
+/* Clicks during a transition reach the live page. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The header is the spatial anchor: it never animates between pages. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
+
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+@keyframes vt-rise-in { from { transform: translateY(14px); } }
+@keyframes vt-scale-out { to { opacity: 0; transform: scale(0.94); } }
+@keyframes vt-scale-in { from { opacity: 0; transform: scale(0.94); } }
+
+/* Page changes: the old page leaves fast, the new one arrives a touch slower. */
+::view-transition-old(.page-out) {
+  animation: vt-fade-out 120ms var(--ease-out) both;
+}
+
+::view-transition-new(.page-in) {
+  animation:
+    vt-fade-in 220ms var(--ease-out) 90ms both,
+    vt-rise-in 360ms var(--ease-out) both;
+}
+
+/* Catalogue filtering: cards that stay glide to their new slot (the
+   browser animates the group), cards that leave or arrive scale. */
+::view-transition-group(.card) {
+  animation-duration: 340ms;
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-old(.card-out) {
+  animation: vt-scale-out 160ms var(--ease-out) both;
+}
+
+::view-transition-new(.card-in) {
+  animation: vt-scale-in 260ms var(--ease-out) 80ms both;
+}
+
+/* Card photo → detail hero. */
+::view-transition-group(.morph) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-image-pair(.morph) {
+  isolation: isolate;
+}
+
+/* Category banner swaps in place. */
+::view-transition-old(.swap) { animation: vt-fade-out 140ms ease-out both; }
+::view-transition-new(.swap) { animation: vt-fade-in 240ms ease-out 60ms both; }
+
+/* ── Game picker ("Let the table decide") ──────────────────────────────── */
+
+.picker {
+  display: grid;
+  gap: var(--space-5);
+  padding: clamp(var(--space-5), 4vw, var(--space-7));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+}
+
+.picker-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  min-height: 112px;
+  perspective: 600px;
+}
+
+.picker-thumb {
+  position: relative;
+  width: 112px;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-sunken);
+  display: grid;
+  place-items: center;
+  color: var(--accent-text);
+}
+
+.picker-thumb .glyph { width: 56px; height: 56px; }
+
+.picker-name {
+  font-size: var(--step-3);
+  font-variation-settings: "wdth" 72;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.picker-stage.is-spinning .picker-name,
+.picker-stage.is-spinning .picker-thumb {
+  animation: flick 90ms linear infinite;
+}
+
+@keyframes flick {
+  50% { transform: translateY(-4px); opacity: 0.6; }
+}
+
+.picker-stage.is-landed .picker-thumb {
+  animation: land 520ms var(--ease-spring) both;
+}
+
+.picker-stage.is-landed .picker-name {
+  animation: rise 420ms var(--ease-out) 60ms both;
+}
+
+@keyframes land {
+  from { transform: rotateY(90deg) scale(0.9); }
+}
+
+.picker-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-2);
+}
+
+/* ── Mobile action bar on game pages ───────────────────────────────────── */
+
+/* Sticky (not fixed) at the end of <main>: it rides the bottom of the
+   viewport while the page content scrolls, then parks above the footer
+   instead of covering it. */
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -10px 30px -18px rgb(14 13 12 / 0.6);
+  animation: bar-up 420ms var(--ease-out) 600ms both;
+}
+
+.action-bar .btn { flex: 1; min-height: 48px; }
+.action-bar .btn-icon { flex: 0 0 48px; padding: 0; }
+
+@keyframes bar-up {
+  from { transform: translateY(100%); }
+}
+
+@media (min-width: 900px) {
+  .action-bar { display: none; }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────
+   globals.css already collapses durations site-wide; this also removes
+   movement that isn't duration-based, and shows end states immediately. */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-group > *,
+  .ticker-track,
+  .home-hero-visual .media.main {
+    animation: none !important;
+  }
+
+  .bank-shot .shot-ball { offset-distance: 100%; }
+
+  .game-card:hover,
+  .game-card:focus-within,
+  .btn:hover,
+  .category-row:hover .category-name,
+  .category-row:focus-within .category-name {
+    transform: none;
+  }
+
+  .glyph * { transition: none; }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+.picker-title,
+.picker-hint { margin-top: var(--space-2); }
+
+/* Search field states */
+.search-form .spinner.search-icon {
+  width: 18px;
+  height: 18px;
+  margin-left: var(--space-4);
+  align-self: center;
+  flex-shrink: 0;
+  color: var(--text-subtle);
+}
+
+.search-form .search-clear {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  padding: 0;
+  border-left: 0;
+  color: var(--text-subtle);
+}
+
+.search-form .search-clear svg { width: 16px; height: 16px; }
+.search-form .search-clear:hover { color: var(--text); background: transparent; }
+
+.site-header { view-transition-name: site-header; }
+
+/* ── Detail pages: staged arrival of the summary column ─────────────────── */
+
+.enter-stagger > * {
+  animation: rise 520ms var(--ease-out) both;
+}
+
+.enter-stagger > :nth-child(2) { animation-delay: 50ms; }
+.enter-stagger > :nth-child(3) { animation-delay: 100ms; }
+.enter-stagger > :nth-child(4) { animation-delay: 150ms; }
+.enter-stagger > :nth-child(5) { animation-delay: 200ms; }
+.enter-stagger > :nth-child(n + 6) { animation-delay: 250ms; }
+
+.detail-gallery .media.main img {
+  animation: settle 1s var(--ease-out) both;
+}

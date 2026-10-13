@@ -6,7 +6,10 @@ type Game = {
   description?: string;
   typical_players?: string | null;
   typical_duration?: string | null;
+  slug?: string;
   rules?: string | null;
+  beginner_notes?: string | null;
+  equipment_notes?: string | null;
   facility_status?: string;
   publication_status?: string;
   featured?: boolean;
@@ -39,6 +42,11 @@ export function GameForm({
 
       <label htmlFor="name">Name</label>
       <input id="name" name="name" defaultValue={game?.name} required />
+      {game?.slug && (
+        <p className="admin-hint">
+          Page address: /games/{game.slug} — kept stable when the name changes, so existing links keep working.
+        </p>
+      )}
 
       <label htmlFor="short_description">Short description</label>
       <input id="short_description" name="short_description" defaultValue={game?.short_description} required />
@@ -46,14 +54,25 @@ export function GameForm({
       <label htmlFor="description">Full description</label>
       <textarea id="description" name="description" rows={5} defaultValue={game?.description} required />
 
-      <label htmlFor="rules">Rules / beginner notes (optional)</label>
+      <label htmlFor="rules">How to play (optional)</label>
       <textarea id="rules" name="rules" rows={3} defaultValue={game?.rules ?? ""} />
+
+      <label htmlFor="beginner_notes">Beginner notes (optional)</label>
+      <textarea id="beginner_notes" name="beginner_notes" rows={2} defaultValue={game?.beginner_notes ?? ""} />
 
       <label htmlFor="typical_players">Typical players</label>
       <input id="typical_players" name="typical_players" defaultValue={game?.typical_players ?? ""} />
 
       <label htmlFor="typical_duration">Typical duration</label>
       <input id="typical_duration" name="typical_duration" defaultValue={game?.typical_duration ?? ""} />
+
+      <label htmlFor="equipment_notes">Equipment on site (owner-confirmed only)</label>
+      <input
+        id="equipment_notes"
+        name="equipment_notes"
+        defaultValue={game?.equipment_notes ?? ""}
+        placeholder="e.g. Cues and balls provided on-site — no unconfirmed counts"
+      />
 
       <label htmlFor="facility_status">Facility status</label>
       <select id="facility_status" name="facility_status" defaultValue={game?.facility_status ?? "unverified"}>
@@ -62,6 +81,11 @@ export function GameForm({
         <option value="coming_soon">Coming soon</option>
         <option value="unavailable">Unavailable</option>
       </select>
+
+      <p className="admin-hint">
+        Players, duration and equipment appear on the public page — leave them blank until the owner confirms them.
+        An <strong>unverified</strong> game can&apos;t be published or featured: confirm it with the owner first.
+      </p>
 
       <label htmlFor="publication_status">Publication status</label>
       <select id="publication_status" name="publication_status" defaultValue={game?.publication_status ?? "draft"}>
