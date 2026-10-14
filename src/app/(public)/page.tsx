@@ -238,7 +238,7 @@ export default async function HomePage() {
                       </ul>
                     </div>
                     <div className="category-thumb media">
-                      {c.cover && <Image src={c.cover.src} alt="" fill sizes="180px" />}
+                      {c.cover && <Image src={c.cover.src} alt="" fill sizes="150px" />}
                     </div>
                     <span className="category-arrow" aria-hidden="true">
                       <Icon name="arrowRight" />
