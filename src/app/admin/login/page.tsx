@@ -1,3 +1,4 @@
+import { BrandMark } from "@/components/BrandMark";
 import { signIn } from "./actions";
 import "../admin.css";
 
@@ -18,6 +19,7 @@ export default async function AdminLoginPage({
   return (
     <main className="admin-auth-page">
       <form action={signIn} className="admin-auth-form">
+        <BrandMark className="admin-auth-mark" tone="default" />
         <h1>The Gents Games &amp; Entertainment</h1>
         <p className="admin-auth-subtitle">Admin sign in</p>
 

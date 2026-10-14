@@ -7,7 +7,7 @@ const VALID_TYPES = ["game", "event", "group", "general"];
 const VALID_CONTACT_METHODS = ["call", "whatsapp", "either"];
 const TOPICS: Record<string, string> = { events: "Upcoming events" };
 
-export type EnquiryField = "contact_name" | "contact_phone" | "contact_email" | "message" | "party_size";
+export type EnquiryField = "contact_name" | "contact_phone" | "contact_email" | "message" | "party_size" | "age_confirm";
 
 export type EnquiryState = {
   error: string | null;
@@ -40,6 +40,7 @@ export async function submitPublicEnquiry(_prev: EnquiryState, formData: FormDat
   const topic = TOPICS[text("topic")] ?? null;
   const partySizeRaw = text("party_size");
   const partySize = partySizeRaw ? Number(partySizeRaw) : null;
+  const ageConfirmed = formData.get("age_confirm") === "on";
 
   const values = {
     contact_name: contactName,
@@ -61,7 +62,8 @@ export async function submitPublicEnquiry(_prev: EnquiryState, formData: FormDat
   if (!rawMessage) fieldErrors.message = "Please enter a message.";
   if (rawMessage.length > 2000) fieldErrors.message = "Please keep your message under 2,000 characters.";
   if (partySize !== null && (!Number.isInteger(partySize) || partySize < 1 || partySize > 500))
-    fieldErrors.party_size = "Enter a group size as a whole number.";
+    fieldErrors.party_size = "Enter the number of people as a whole number.";
+  if (!ageConfirmed) fieldErrors.age_confirm = "Please confirm you're 18 or over — this is an 18+ venue.";
 
   if (!VALID_TYPES.includes(enquiryType) || (preferredContactMethod && !VALID_CONTACT_METHODS.includes(preferredContactMethod))) {
     return { error: "Something about this form was invalid — please reload the page and try again.", fieldErrors, values };

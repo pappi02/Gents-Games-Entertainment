@@ -107,6 +107,7 @@ A new admin dashboard (not reused from another system) must let staff:
 - Treated as a **sister brand**: own domain/subdomain, own visual identity, own navigation and SEO.
 - Shares verified venue location/contact details where appropriate.
 - Discreet cross-promotion link between the two sites.
+- The Playhouse is an adults-only (18+) platform: the link lives in the footer only (never the main nav), is labelled 18+, opens in a new tab with `rel="nofollow"`, and no Playhouse services, hosts or staff are described or promoted on this site.
 
 ## 11. Pre-Launch Verification Checklist
 

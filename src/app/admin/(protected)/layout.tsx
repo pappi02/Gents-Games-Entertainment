@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { BrandMark } from "@/components/BrandMark";
 import { getAdminProfile } from "@/lib/admin/session";
 import { signOut } from "../actions";
 import "../admin.css";
@@ -46,7 +47,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <div className="admin-brand">Gents Games &amp; Entertainment</div>
+        <div className="admin-brand">
+          <BrandMark className="admin-brand-mark" />
+          <span>Gents Games &amp; Entertainment</span>
+        </div>
         <nav>
           {navItems
             .filter((item) => item.roles.includes(profile.role))

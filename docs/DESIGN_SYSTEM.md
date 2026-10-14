@@ -21,6 +21,11 @@ These are design tokens, not confirmed brand specifications — validate contras
 
 - Compact wordmark: **The Gents Games & Entertainment.**
 - Distinct logo and favicon — separate from the sister brand's identity.
+- **Logo:** an interlocking double-G monogram on a square badge. G1 has an ink ring and a red bar; G2 swaps the colours (red ring, ink bar) and is turned 180°. The two rings are woven like chain links — each passes over the other once, shown by a thin badge-coloured gap at the crossings; wordmark "THE GENTS" in Archivo 800 at `wdth` 72 over "GAMES & ENTERTAINMENT" in Archivo 600, tracked to the same width. Ink badge on light backgrounds, paper badge ("reverse") on dark.
+  - Files: `public/brand/` — `gents-logo(.svg|.png)`, `gents-logo-reverse(.svg|.png)`, `gents-mark(.svg|.png)`, `gents-mark-reverse.svg`. Favicon/app icons: `src/app/favicon.ico`, `icon.svg` (switches badge for dark browser UI), `apple-icon.png`.
+  - In-site: `src/components/BrandMark.tsx` (header, footer lockup, admin, share image), drawn from the generated `src/components/brand-mark-geometry.ts`. Lettering in the header/footer is live text in the site font; the files above have it outlined.
+  - All generated from one geometry by `scripts/brand/generate-brand-assets.py` then `rasterize-brand-assets.mjs` — edit there, not by hand.
+  - Minimum size: mark 16px (icon variant), lockup 120px wide. Keep clear space of half the mark's width around it; don't recolour, stretch, or rotate it.
 - Restrained pairing: strong display typography for headers + highly readable body text.
 - Alternate darker editorial sections with lighter content areas where it improves readability.
 

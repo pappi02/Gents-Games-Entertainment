@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getVenueSettings } from "@/lib/public/queries";
 import { contactLinks } from "@/lib/public/contact";
 import { formatPhone } from "@/lib/public/format";
-import { BrandMark } from "./Brand";
-import { LEGAL_ITEMS, NAV_ITEMS } from "./nav";
+import { Brand } from "./Brand";
+import { LEGAL_ITEMS, NAV_ITEMS, SISTER_BRAND } from "./nav";
 
 // Venue details come from the cached, tag-invalidated venue_settings read —
 // safe in the shared layout because "use cache" doesn't read cookies, so it
@@ -18,14 +18,15 @@ export async function SiteFooter() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Link href="/" className="brand" aria-label="The Gents Games & Entertainment — home">
-              <BrandMark />
-              <span className="brand-text" aria-hidden="true">
-                <span className="brand-name">The Gents</span>
-                <span className="brand-sub">Games &amp; Entertainment</span>
-              </span>
-            </Link>
-            <p>Games, recreation and good company. A sister brand of The Gents Playhouse.</p>
+            <Brand className="brand brand-lg" />
+            <p>
+              Games, recreation and good company. A sister brand of{" "}
+              <a href={SISTER_BRAND.href} target="_blank" rel="noopener noreferrer nofollow" className="text-link">
+                {SISTER_BRAND.name}
+                <span className="visually-hidden"> (opens in a new tab)</span>
+              </a>{" "}
+              <span className="subtle">(adults only, 18+)</span>.
+            </p>
           </div>
 
           <nav aria-label="Footer">
@@ -87,7 +88,10 @@ export async function SiteFooter() {
           {/* Static year, not new Date() — a dynamic clock read would force
               this otherwise-static layout to render per-request under
               Next.js 16 Cache Components. Update by hand yearly. */}
-          <p>© 2026 The Gents Games &amp; Entertainment. Facility details reflect what the venue has confirmed.</p>
+          <p>
+            © 2026 The Gents Games &amp; Entertainment. Facility details reflect what the venue has confirmed. 18+ venue
+            — valid ID required at entry.
+          </p>
           <nav aria-label="Legal">
             <ul className="footer-list footer-legal">
               {LEGAL_ITEMS.map((item) => (

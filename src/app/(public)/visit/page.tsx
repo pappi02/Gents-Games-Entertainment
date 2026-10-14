@@ -54,6 +54,7 @@ export default function VisitPage({ searchParams }: { searchParams: VisitSearchP
                   Send an enquiry
                 </h2>
                 <p className="muted">We&apos;ll get back to you using the contact details you provide.</p>
+                <p className="subtle">This is an 18+ venue. Valid photo ID is required at entry.</p>
               </div>
               <Suspense
                 fallback={<div className="skeleton skeleton-form" aria-busy="true" aria-label="Loading enquiry form" />}

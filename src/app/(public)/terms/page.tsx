@@ -27,6 +27,13 @@ export default function TermsPage() {
             that our team will follow up on.
           </p>
 
+          <h2>Age requirement</h2>
+          <p>
+            The Gents Games &amp; Entertainment is an 18+ venue. Entry is restricted to guests aged 18 and over, and
+            valid photo ID is required at the door. This applies to every visitor, including those attending as
+            part of a group.
+          </p>
+
           <h2>Facility information</h2>
           <p>
             We aim to keep facility availability, pricing, and event details accurate and up to date. Where a facility

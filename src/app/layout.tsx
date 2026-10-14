@@ -21,7 +21,7 @@ const instrumentSerif = Instrument_Serif({
 
 const siteName = "The Gents Games & Entertainment";
 const siteDescription =
-  "Games and recreation in Kileleshwa, Nairobi. Explore the activities at The Gents Games & Entertainment and plan your visit.";
+  "An 18+ venue in Kileleshwa, Nairobi. Come solo or bring your group — explore the activities at The Gents Games & Entertainment and plan your visit.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_SITE_URL ?? "http://localhost:3000"),

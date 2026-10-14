@@ -108,7 +108,7 @@ export function EnquiryForm({ enquiryType, hidden, messageHint, showPartySize }:
           </select>
         </Field>
         {showPartySize && (
-          <Field id="party_size" label="Group size" optional error={err("party_size")}>
+          <Field id="party_size" label="Number of people" optional error={err("party_size")}>
             <input
               id="party_size"
               name="party_size"
@@ -137,6 +137,25 @@ export function EnquiryForm({ enquiryType, hidden, messageHint, showPartySize }:
           aria-describedby={describedBy("message", "message-hint")}
         />
       </Field>
+
+      <div className="field-checkbox">
+        <label htmlFor="age_confirm">
+          <input
+            id="age_confirm"
+            name="age_confirm"
+            type="checkbox"
+            required
+            aria-invalid={err("age_confirm") ? true : undefined}
+            aria-describedby={err("age_confirm") ? "age_confirm-error" : undefined}
+          />
+          <span>I confirm I am 18 years of age or older. This is an 18+ venue.</span>
+        </label>
+        {err("age_confirm") && (
+          <p id="age_confirm-error" className="field-error">
+            {err("age_confirm")}
+          </p>
+        )}
+      </div>
 
       <div className="btn-row form-actions">
         <button type="submit" className="btn btn-primary" disabled={pending} aria-disabled={pending}>

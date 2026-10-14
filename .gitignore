@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# brand generator intermediates (scripts/brand/generate-brand-assets.py)
+/scripts/brand/.out/

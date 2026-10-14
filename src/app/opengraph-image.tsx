@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BrandMark } from "@/components/BrandMark";
 
 // Typographic share card — deliberately uses no photography, so a social
 // preview can never imply an illustrative image shows the real venue.
@@ -23,9 +24,7 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <div style={{ width: 56, height: 56, border: "3px solid #f4f1ea", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", padding: 6 }}>
-            <div style={{ width: 22, height: 5, background: "#b8202e" }} />
-          </div>
+          <BrandMark size={84} />
           <div style={{ fontSize: 28, letterSpacing: 6, textTransform: "uppercase", color: "#c4beb2" }}>
             The Gents Games &amp; Entertainment
           </div>

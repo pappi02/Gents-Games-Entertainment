@@ -115,8 +115,8 @@ export default async function HomePage() {
                 </span>
               </h1>
               <p className="lede" style={stagger(4)}>
-                Classic games, friendly rivalry and good company. Line up a shot, plan your next move, or settle a
-                rematch with friends at The Gents Games &amp; Entertainment.
+                Classic games, friendly rivalry and good company. Come with friends or come on your own — there&apos;s
+                always someone to play at The Gents Games &amp; Entertainment.
               </p>
               <div className="btn-row btn-row-stack" style={stagger(5)}>
                 <Link href="/games" className="btn btn-primary">
@@ -184,6 +184,12 @@ export default async function HomePage() {
                 <span>{venue.address}</span>
               </li>
             )}
+            <li>
+              <Icon name="info" />
+              <span>
+                <strong>18+</strong> — valid ID required at entry
+              </span>
+            </li>
           </ul>
         </div>
 
@@ -297,8 +303,9 @@ export default async function HomePage() {
                   More than <span className="accent-serif">just</span> a game
                 </h2>
                 <p className="lede">
-                  Bring your friends, choose your game, and enjoy the challenge. Whether you&apos;re here for a relaxed
-                  evening or a competitive rematch, the space is built for good company and friendly rivalry.
+                  Come with friends or come on your own, choose your game, and enjoy the challenge. Whether you&apos;re
+                  here for a relaxed evening or a competitive rematch, the space is built for good company and friendly
+                  rivalry.
                 </p>
               </div>
               <ul className="point-list">
@@ -321,6 +328,13 @@ export default async function HomePage() {
                   </li>
                 )}
                 <li>
+                  <Icon name="target" />
+                  <div>
+                    <strong>Coming solo?</strong>
+                    <span>Pair up with other guests, or ask the staff for a game.</span>
+                  </div>
+                </li>
+                <li>
                   <Icon name="users" />
                   <div>
                     <strong>Bring the group</strong>
@@ -342,17 +356,21 @@ export default async function HomePage() {
           <div className="container play-grid">
             <div className="stack-lg reveal">
               <div className="stack">
-                <p className="eyebrow">Better with company</p>
+                <p className="eyebrow">Play your way</p>
                 <h2 id="together-title" className="display display-lg">
                   Bring <span className="accent-serif">the</span> rivalry
                 </h2>
                 <p className="lede">
-                  A birthday, a work outing, or a standing group that likes to play. Share your preferred date, group
-                  size and the games you&apos;re interested in — the team will come back to you with what&apos;s
-                  possible.
+                  Drop in on your own and take on other guests or the staff. Planning a birthday, a work outing, or a
+                  standing game night? Share your preferred date, group size and the games you&apos;re interested in
+                  — the team will come back to you with what&apos;s possible.
                 </p>
               </div>
               <ul className="format-list">
+                <li>
+                  <strong>Solo drop-in</strong>
+                  <span>Find an opponent when you arrive.</span>
+                </li>
                 <li>
                   <strong>Head to head</strong>
                   <span>Settle it one on one.</span>

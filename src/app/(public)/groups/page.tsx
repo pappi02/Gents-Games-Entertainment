@@ -10,7 +10,7 @@ import { PageTransition } from "../_components/PageTransition";
 
 export const metadata: Metadata = {
   title: "Groups & Private Events",
-  description: "Group visits, friendly competitions, and private event enquiries at The Gents Games & Entertainment.",
+  description: "Group visits, friendly competitions, and private event enquiries at The Gents Games & Entertainment. 18+ venue.",
   alternates: { canonical: "/groups" },
   openGraph: pageOpenGraph("Groups & Private Events", "/groups"),
 };

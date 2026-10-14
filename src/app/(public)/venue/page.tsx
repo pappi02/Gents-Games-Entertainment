@@ -45,7 +45,7 @@ export default async function VenuePage() {
               Built for <span className="accent-serif">good</span> company
             </>
           }
-          lede="A space to bring friends, challenge colleagues, or settle in for a relaxed game — with friendly competition at its heart."
+          lede="Drop in on your own, bring friends, or challenge colleagues — there's always a game on, with friendly competition at its heart."
         >
           <p className="notice">
             <Icon name="info" />
@@ -53,6 +53,10 @@ export default async function VenuePage() {
               The images on this page show the style and atmosphere we&apos;re building toward — they aren&apos;t
               photographs of the venue itself. Real photography of the space is on its way.
             </span>
+          </p>
+          <p className="notice">
+            <Icon name="info" />
+            <span>This is an 18+ venue. Valid photo ID is required at entry — no exceptions.</span>
           </p>
         </PageIntro>
 
