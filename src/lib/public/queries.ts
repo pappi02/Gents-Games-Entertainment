@@ -191,6 +191,73 @@ export async function getEventBySlug(slug: string) {
   return data ?? null;
 }
 
+export type PublicMembershipTier = {
+  id: string;
+  name: string;
+  slug: string;
+  summary: string;
+  description: string | null;
+  benefits: string[];
+  /** Null unless the owner has confirmed the fees — never render a guessed price. */
+  fees: { currency: string; subscription: number; billingPeriod: string; joiningFee: number | null } | null;
+  categories: { name: string; slug: string }[];
+};
+
+/**
+ * Published membership tiers, in display order. Fees are only returned when
+ * `fees_confirmed` is set (same rule as pricing_options.is_active), and a
+ * tier's included categories are limited to published categories that hold
+ * at least one public game — so a tier can never advertise access to an
+ * unconfirmed facility.
+ */
+export async function getPublishedMembershipTiers(): Promise<PublicMembershipTier[]> {
+  "use cache";
+  cacheTag("membership", "categories", "games");
+  cacheLife("hours");
+
+  const supabase = createPublicClient();
+  const [{ data: tiers }, categories] = await Promise.all([
+    supabase
+      .from("membership_tiers")
+      .select(
+        "id, name, slug, summary, description, benefits, currency, subscription_minor_units, billing_period, joining_fee_minor_units, fees_confirmed, membership_tier_categories(category_id)",
+      )
+      .order("sort_order"),
+    getCategoriesWithGameCounts(),
+  ]);
+
+  return (tiers ?? []).map((t) => {
+    const included = new Set(
+      ((t.membership_tier_categories as { category_id: string }[] | null) ?? []).map((l) => l.category_id),
+    );
+    return {
+      id: t.id,
+      name: t.name,
+      slug: t.slug,
+      summary: t.summary,
+      description: t.description,
+      benefits: (t.benefits ?? "")
+        .split("\n")
+        .map((b: string) => b.trim())
+        .filter(Boolean),
+      fees:
+        t.fees_confirmed && t.subscription_minor_units !== null
+          ? {
+              currency: t.currency,
+              subscription: Number(t.subscription_minor_units),
+              billingPeriod: t.billing_period,
+              joiningFee: t.joining_fee_minor_units === null ? null : Number(t.joining_fee_minor_units),
+            }
+          : null,
+      categories: categories.filter((c) => included.has(c.id)).map(({ name, slug }) => ({ name, slug })),
+    };
+  });
+}
+
+export async function getMembershipTierBySlug(slug: string) {
+  return (await getPublishedMembershipTiers()).find((t) => t.slug === slug) ?? null;
+}
+
 export async function getVenueSettings() {
   "use cache";
   cacheTag("venue-settings");

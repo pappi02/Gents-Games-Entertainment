@@ -1,9 +1,10 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getMembershipTierBySlug } from "@/lib/public/queries";
 import { redirect } from "next/navigation";
 
-const VALID_TYPES = ["game", "event", "group", "general"];
+const VALID_TYPES = ["game", "event", "group", "general", "membership"];
 const VALID_CONTACT_METHODS = ["call", "whatsapp", "either"];
 const TOPICS: Record<string, string> = { events: "Upcoming events" };
 
@@ -38,6 +39,7 @@ export async function submitPublicEnquiry(_prev: EnquiryState, formData: FormDat
   const relatedGameId = text("related_game_id") || null;
   const relatedEventId = text("related_event_id") || null;
   const topic = TOPICS[text("topic")] ?? null;
+  const membershipTierSlug = enquiryType === "membership" ? text("membership_tier") : "";
   const partySizeRaw = text("party_size");
   const partySize = partySizeRaw ? Number(partySizeRaw) : null;
   const ageConfirmed = formData.get("age_confirm") === "on";
@@ -72,7 +74,17 @@ export async function submitPublicEnquiry(_prev: EnquiryState, formData: FormDat
     return { error: "Please check the highlighted fields.", fieldErrors, values };
   }
 
-  const message = topic ? `[Topic: ${topic}]\n${rawMessage}` : rawMessage;
+  // The tier is resolved server-side from published tiers, so a tampered
+  // hidden field can't put an arbitrary label in front of staff.
+  const tier = membershipTierSlug ? await getMembershipTierBySlug(membershipTierSlug) : null;
+  const prefix = tier
+    ? `[Membership: ${tier.name}]`
+    : enquiryType === "membership"
+      ? "[Membership]"
+      : topic
+        ? `[Topic: ${topic}]`
+        : null;
+  const message = prefix ? `${prefix}\n${rawMessage}` : rawMessage;
 
   const supabase = await createClient();
   const { data: reference, error } = await supabase.rpc("submit_enquiry", {

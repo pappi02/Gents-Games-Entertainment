@@ -6,7 +6,7 @@ import { submitPublicEnquiry, type EnquiryField, type EnquiryState } from "./act
 const initialState: EnquiryState = { error: null, fieldErrors: {}, values: {} };
 
 type Props = {
-  enquiryType: "game" | "event" | "group" | "general";
+  enquiryType: "game" | "event" | "group" | "general" | "membership";
   hidden: Record<string, string>;
   messageHint: string;
   showPartySize: boolean;

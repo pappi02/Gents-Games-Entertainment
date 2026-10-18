@@ -8,7 +8,7 @@
 // ops script, never run from the app). Provenance/licensing per image is
 // recorded in supabase/seed-assets/LICENSES.md.
 //
-// Usage: node scripts/seed-media.mjs
+// Usage: node scripts/seed-media.mjs [game-slug ...]
 
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
@@ -72,9 +72,43 @@ const GAMES = [
     gameSlug: "darts",
     images: [{ file: "darts.webp", alt: "Darts embedded in a dartboard.", note: COMMONS_NOTE }],
   },
+  // October 2026 leisure / entertainment / casino-style additions. These games
+  // are draft + unverified, so the images stay private (game_media RLS only
+  // exposes media on published games) until the owner confirms each one.
+  {
+    gameSlug: "mini-golf",
+    images: [{ file: "mini-golf.webp", caption: "Photo: David Dugan, CC BY-SA 3.0, via Wikimedia Commons", alt: "A mini golf hole with a raised green and a numbered flag sign.", note: COMMONS_NOTE }],
+  },
+  {
+    gameSlug: "swimming-pool",
+    images: [{ file: "swimming-pool.webp", caption: "Photo: Bernard Gagnon, CC BY-SA 4.0, via Wikimedia Commons", alt: "An outdoor swimming pool with a tiled deck and loungers.", note: COMMONS_NOTE }],
+  },
+  {
+    gameSlug: "live-band-salsa",
+    images: [
+      { file: "live-band-salsa.webp", caption: "Photo: Glen Bowman, CC BY 2.0, via Wikimedia Commons", alt: "A salsa band performs on stage while a couple dances in front.", note: COMMONS_NOTE },
+      { file: "salsa-dancers.webp", caption: "Photo: Hilcias Salazar, CC BY 2.0, via Wikimedia Commons", alt: "Two salsa dancers in performance costume mid-routine.", note: COMMONS_NOTE },
+    ],
+  },
+  {
+    gameSlug: "roulette",
+    images: [{ file: "roulette.webp", caption: "Photo: Håkan Dahlström, CC BY 2.0, via Wikimedia Commons", alt: "Close-up of a green roulette table layout.", note: COMMONS_NOTE }],
+  },
+  {
+    gameSlug: "blackjack",
+    images: [{ file: "blackjack.webp", alt: "Cards and chips dealt on a green blackjack table.", note: COMMONS_NOTE }],
+  },
+  {
+    gameSlug: "poker",
+    images: [{ file: "poker.webp", alt: "Stacks of coloured poker chips.", note: COMMONS_NOTE }],
+  },
 ];
 
-for (const { gameSlug, images } of GAMES) {
+// Optional slug filter, so new games can be seeded without re-uploading
+// everyone else's photos: node scripts/seed-media.mjs mini-golf roulette
+const only = process.argv.slice(2);
+
+for (const { gameSlug, images } of GAMES.filter((g) => only.length === 0 || only.includes(g.gameSlug))) {
   const { data: game, error: gameErr } = await admin.from("games").select("id, name").eq("slug", gameSlug).single();
   if (gameErr || !game) {
     console.log(`SKIP ${gameSlug}: game not found (${gameErr?.message ?? "no row"})`);
@@ -130,6 +164,7 @@ for (const { gameSlug, images } of GAMES) {
       game_id: game.id,
       media_asset_id: asset.id,
       alt_text: img.alt,
+      caption: img.caption ?? null,
       sort_order: sortOrder++,
     });
     if (linkErr) {

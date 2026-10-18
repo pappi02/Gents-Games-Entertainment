@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { pageOpenGraph } from "@/lib/public/seo";
 import Link from "next/link";
-import { getVenueSettings, getGameBySlug, getEventBySlug } from "@/lib/public/queries";
+import { getVenueSettings, getGameBySlug, getEventBySlug, getMembershipTierBySlug } from "@/lib/public/queries";
 import { contactLinks } from "@/lib/public/contact";
 import { formatPhone } from "@/lib/public/format";
 import { PageIntro } from "../_components/PageIntro";
@@ -24,6 +24,7 @@ type VisitSearchParams = Promise<{
   event?: string;
   type?: string;
   topic?: string;
+  tier?: string;
 }>;
 
 // The page itself never awaits searchParams: venue details come from cached
@@ -153,11 +154,12 @@ async function VenueDetails() {
 }
 
 async function EnquirySection({ searchParams }: { searchParams: VisitSearchParams }) {
-  const { submitted, game: gameSlug, event: eventSlug, type, topic } = await searchParams;
+  const { submitted, game: gameSlug, event: eventSlug, type, topic, tier: tierSlug } = await searchParams;
 
-  const [game, event] = await Promise.all([
+  const [game, event, tier] = await Promise.all([
     gameSlug ? getGameBySlug(gameSlug) : Promise.resolve(null),
     eventSlug ? getEventBySlug(eventSlug) : Promise.resolve(null),
+    type === "membership" && tierSlug ? getMembershipTierBySlug(tierSlug) : Promise.resolve(null),
   ]);
 
   if (submitted) {
@@ -180,11 +182,20 @@ async function EnquirySection({ searchParams }: { searchParams: VisitSearchParam
     );
   }
 
-  const enquiryType = game ? "game" : event ? "event" : type === "group" ? "group" : "general";
+  const enquiryType = game
+    ? "game"
+    : event
+      ? "event"
+      : type === "group"
+        ? "group"
+        : type === "membership"
+          ? "membership"
+          : "general";
   const hidden: Record<string, string> = {};
   if (game) hidden.related_game_id = game.id;
   if (event) hidden.related_event_id = event.id;
   if (!game && !event && topic === "events") hidden.topic = "events";
+  if (enquiryType === "membership" && tier) hidden.membership_tier = tier.slug;
 
   const context = game
     ? `${game.name}`
@@ -192,7 +203,11 @@ async function EnquirySection({ searchParams }: { searchParams: VisitSearchParam
       ? event.title
       : enquiryType === "group"
         ? "A group visit"
-        : topic === "events"
+        : enquiryType === "membership"
+          ? tier
+            ? `${tier.name} membership`
+            : "Membership"
+          : topic === "events"
           ? "Upcoming events"
           : null;
 
@@ -201,6 +216,8 @@ async function EnquirySection({ searchParams }: { searchParams: VisitSearchParam
       ? "Include your preferred date, the occasion, and which games you're interested in."
       : enquiryType === "game"
         ? "e.g. prices, availability on a particular day, or anything else you'd like to know."
+        : enquiryType === "membership"
+          ? "Tell us which games you play most, how often you'd visit, and whether it's just you, a couple or a family."
         : "Ask about facilities, prices, group visits or upcoming events.";
 
   return (

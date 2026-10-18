@@ -5,6 +5,15 @@ Stock photos used to seed the catalogue at launch (per [docs/PHASE_0_DISCOVERY.m
 | File | Game | Source | License | Attribution |
 |---|---|---|---|---|
 | `darts.webp` | Darts | [Darts in a dartboard.jpg](https://commons.wikimedia.org/wiki/File:Darts_in_a_dartboard.jpg) | Public domain | PeterPan23 |
+| `mini-golf.webp` | Mini Golf *(draft)* | [15-21-202, miniature golf - panoramio.jpg](https://commons.wikimedia.org/wiki/File:15-21-202,_miniature_golf_-_panoramio.jpg) | CC BY-SA 3.0 | David Dugan |
+| `swimming-pool.webp` | Swimming Pool *(draft)* | [Swimming pool at Hotel Terra Barichara.jpg](https://commons.wikimedia.org/wiki/File:Swimming_pool_at_Hotel_Terra_Barichara.jpg) | CC BY-SA 4.0 | Bernard Gagnon |
+| `live-band-salsa.webp` | Live Band & Salsa Dancers *(draft)* — primary | [Salsa band and salsa dancing - Fatacil … (1469449571).jpg](https://commons.wikimedia.org/wiki/File:Salsa_band_and_salsa_dancing_-_Fatacil_Agriculture_and_Tourism_Fair_-_Lagoa_-_The_Algarve,_Portugal_(1469449571).jpg) | CC BY 2.0 | Glen Bowman |
+| `salsa-dancers.webp` | Live Band & Salsa Dancers *(draft)* — secondary | [Salsa en Cali.jpg](https://commons.wikimedia.org/wiki/File:Salsa_en_Cali.jpg) | CC BY 2.0 | Hilcias Salazar |
+| `roulette.webp` | Roulette *(draft)* | [Roulette table (5276343477).jpg](https://commons.wikimedia.org/wiki/File:Roulette_table_(5276343477).jpg) | CC BY 2.0 | Håkan Dahlström |
+| `blackjack.webp` | Blackjack *(draft)* | [Blackjack game 1.JPG](https://commons.wikimedia.org/wiki/File:Blackjack_game_1.JPG) | CC0 | Scott Nazelrod |
+| `poker.webp` | Poker (Texas Hold'em) *(draft)* | [Poker chips 2.jpg](https://commons.wikimedia.org/wiki/File:Poker_chips_2.jpg) | CC0 | Jismab |
+
+The *(draft)* rows (October 2026) illustrate proposed activities that are not confirmed at the venue. They're attached to draft games, so RLS keeps them private until each game is confirmed and published. CC BY / CC BY-SA images need the attribution above wherever they're shown, so `scripts/seed-media.mjs` writes it into each image's caption, which the game page prints under the photo. Keep the caption if you edit the image in **Media**.
 
 **Retired** (replaced by owner-provided images below; files deleted from the repo and from Storage): Pool — [Billiards table 4.jpg](https://commons.wikimedia.org/wiki/File:Billiards_table_4.jpg) (CC0, Kurt Kaiser); Chess — [Chess Set in Elista.jpg](https://commons.wikimedia.org/wiki/File:Chess_Set_in_Elista.jpg) (public domain, Buzava); Cards — [Cards -Deck Playing.jpg](https://commons.wikimedia.org/wiki/File:Cards_-Deck_Playing.jpg) (CC0 via Pixabay); Table Tennis — [Table tennis table 007.JPG](https://commons.wikimedia.org/wiki/File:Table_tennis_table_007.JPG) (CC BY-SA 3.0 / GFDL, Karol Głąb). Listed so the history stays traceable.
 

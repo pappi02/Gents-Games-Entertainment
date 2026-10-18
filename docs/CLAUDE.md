@@ -14,6 +14,7 @@ Full specs:
 - [SECURITY.md](SECURITY.md) — auth, authorization, upload safety, abuse protection
 - [CODE_STYLE.md](CODE_STYLE.md) — coding conventions for this repo
 - [TESTING.md](TESTING.md) — accessibility, performance, security, and pre-launch checklists
+- [MEMBERSHIP_AND_LEISURE_EXPANSION.md](MEMBERSHIP_AND_LEISURE_EXPANSION.md) — membership tiers, leisure/entertainment/casino-style proposals and their launch rules
 
 ## The One Rule That Overrides Everything Else
 

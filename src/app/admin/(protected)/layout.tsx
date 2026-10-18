@@ -38,6 +38,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/categories", label: "Categories", roles: ["super_admin", "content_editor"] },
     { href: "/admin/games", label: "Games", roles: ["super_admin", "content_editor"] },
     { href: "/admin/events", label: "Events", roles: ["super_admin", "content_editor"] },
+    // Fees are pricing, so membership writes are super_admin-only (RLS).
+    { href: "/admin/membership", label: "Membership", roles: ["super_admin"] },
     { href: "/admin/enquiries", label: "Enquiries", roles: ["super_admin", "content_editor", "enquiry_staff"] },
     { href: "/admin/venue-settings", label: "Venue Settings", roles: ["super_admin"] },
     { href: "/admin/users", label: "Admin Users", roles: ["super_admin"] },

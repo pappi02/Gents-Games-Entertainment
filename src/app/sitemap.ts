@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/events`, priority: 0.6 },
     { url: `${siteUrl}/venue`, priority: 0.7 },
     { url: `${siteUrl}/groups`, priority: 0.6 },
+    { url: `${siteUrl}/membership`, priority: 0.6 },
     { url: `${siteUrl}/visit`, priority: 0.8 },
     { url: `${siteUrl}/privacy`, priority: 0.2 },
     { url: `${siteUrl}/terms`, priority: 0.2 },

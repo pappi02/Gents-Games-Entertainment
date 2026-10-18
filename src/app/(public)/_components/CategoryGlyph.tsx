@@ -51,6 +51,34 @@ export function CategoryGlyph({ slug, className = "glyph" }: { slug: string; cla
           <path d="M22 26 40 8m0 0-6 1m6-1-1 6" className="glyph-dart" />
         </svg>
       );
+    case "leisure":
+      // A putting green: flag in the hole, ball on its way.
+      return (
+        <svg {...common}>
+          <ellipse cx="26" cy="38" rx="18" ry="5" />
+          <path d="M30 38V7l11 5-11 5" />
+          <circle cx="12" cy="36" r="2.5" fill="currentColor" className="glyph-ball" />
+        </svg>
+      );
+    case "music":
+      // Paired quavers.
+      return (
+        <svg {...common}>
+          <path d="M18 34V10l20-4v24" />
+          <path d="M18 16l20-4" />
+          <ellipse cx="13" cy="34" rx="5" ry="4" className="glyph-piece" />
+          <ellipse cx="33" cy="30" rx="5" ry="4" className="glyph-piece" />
+        </svg>
+      );
+    case "chip":
+      // A play chip — edge notches and an inner ring.
+      return (
+        <svg {...common}>
+          <circle cx="24" cy="24" r="18" />
+          <circle cx="24" cy="24" r="10" className="glyph-ring" />
+          <path d="M24 6v6M24 36v6M6 24h6M36 24h6M11.3 11.3l4.2 4.2M32.5 32.5l4.2 4.2M36.7 11.3l-4.2 4.2M15.5 32.5l-4.2 4.2" />
+        </svg>
+      );
     default:
       // A die — generic "game".
       return (
@@ -65,6 +93,9 @@ export function CategoryGlyph({ slug, className = "glyph" }: { slug: string; cla
 }
 
 function glyphKey(slug: string) {
+  if (/casino|roulette|blackjack|poker/.test(slug)) return "chip";
+  if (/live|music|entertainment|band|salsa/.test(slug)) return "music";
+  if (/outdoor|leisure|golf|swim/.test(slug)) return "leisure";
   if (/cue|pool|billiard|snooker/.test(slug)) return "cue";
   if (/social|party/.test(slug)) return "die";
   if (/board|strategy|chess|card/.test(slug)) return "board";

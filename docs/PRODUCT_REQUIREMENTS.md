@@ -45,7 +45,7 @@ Some activities already exist at the venue; others are planned. The website **mu
 
 - Online payments, deposits, refunds.
 - Guaranteed/auto-confirmed reservations (enquiry only, not booking).
-- Public user accounts or memberships.
+- Public user accounts, online membership sign-up, or membership payments. (Membership tiers can be shown and enquired about; see [MEMBERSHIP_AND_LEISURE_EXPANSION.md](MEMBERSHIP_AND_LEISURE_EXPANSION.md).)
 - Real-time equipment scheduling or occupancy tracking.
 - Gambling, wagering, or real-money gaming functionality.
 - Unverified testimonials, ratings, awards, or visitor-number claims.
@@ -64,6 +64,9 @@ These are **candidate** catalogue entries, not a claim that all are currently in
 | Cards & Table Games | Rummy, whist, UNO, recreational poker-style games, dominoes |
 | Video & Console Gaming | Football (e.g. EA SPORTS FC), fighting, racing, multiplayer party games |
 | Social & Group Entertainment | Live sports viewing, game nights, group competitions, private group entertainment, special events |
+| Outdoor & Leisure | Mini golf, swimming pool |
+| Live Entertainment | Live band with salsa dancers |
+| Casino-Style Games | Roulette, blackjack, poker (play chips only, with no cash value and no prizes; pending legal review) |
 
 Each category/game page must explain: what the game is, how to participate, player count/format, difficulty/beginner guidance, and facility status. Casual recreational card games must be clearly distinguished from anything involving money or prizes; wagering is out of scope until legally reviewed.
 
@@ -75,6 +78,7 @@ Each category/game page must explain: what the game is, how to participate, play
 - `/events`, `/events/[slug]` — Tournaments & Events
 - `/venue` — The Venue (real photography, facilities, atmosphere)
 - `/groups` — Groups & Private Events
+- `/membership` — Membership tiers and register-interest (enquiry only)
 - `/visit` — Visit Us (address, map, hours, contacts, directions)
 - `/privacy`, `/terms`, `/accessibility`
 

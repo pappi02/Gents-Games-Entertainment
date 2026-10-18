@@ -1144,6 +1144,10 @@ figcaption {
 
 .panel .btn-row { margin-top: auto; padding-top: var(--space-3); }
 
+/* Membership tiers: a list of panels, equal height per row. */
+ul.panel-grid { list-style: none; padding: 0; }
+ul.panel-grid > li > .panel { height: 100%; }
+
 /* ── Closing CTA ────────────────────────────────────────────────────────── */
 
 .closing {
