@@ -172,9 +172,12 @@ function TierPanel({ tier }: { tier: PublicMembershipTier }) {
             {tier.categories.map((c) => (
               <li key={c.slug}>
                 <Icon name="check" />
-                <Link href={`/games?category=${c.slug}`} className="text-link">
-                  {c.name}
-                </Link>
+                <span>
+                  <Link href={`/games?category=${c.slug}`} className="text-link">
+                    {c.name}
+                  </Link>
+                  {c.comingSoon && <span className="subtle"> · Coming soon</span>}
+                </span>
               </li>
             ))}
           </ul>

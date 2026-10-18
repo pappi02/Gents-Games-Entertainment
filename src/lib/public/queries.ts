@@ -200,7 +200,8 @@ export type PublicMembershipTier = {
   benefits: string[];
   /** Null unless the owner has confirmed the fees — never render a guessed price. */
   fees: { currency: string; subscription: number; billingPeriod: string; joiningFee: number | null } | null;
-  categories: { name: string; slug: string }[];
+  /** `comingSoon` when none of the category's public games is playable yet. */
+  categories: { name: string; slug: string; comingSoon: boolean }[];
 };
 
 /**
@@ -249,7 +250,13 @@ export async function getPublishedMembershipTiers(): Promise<PublicMembershipTie
               joiningFee: t.joining_fee_minor_units === null ? null : Number(t.joining_fee_minor_units),
             }
           : null,
-      categories: categories.filter((c) => included.has(c.id)).map(({ name, slug }) => ({ name, slug })),
+      categories: categories
+        .filter((c) => included.has(c.id))
+        .map(({ name, slug, games }) => ({
+          name,
+          slug,
+          comingSoon: !games.some((g) => g.facility_status === "available"),
+        })),
     };
   });
 }
