@@ -8,7 +8,7 @@ import { PageIntro } from "../_components/PageIntro";
 import { ContactActions } from "../_components/ContactActions";
 import { Icon } from "../_components/Icon";
 import { PageTransition } from "../_components/PageTransition";
-import venueLounge from "@/assets/venue-lounge.webp";
+import venuePoolRoom from "@/assets/venue-pool-room.webp";
 
 export const metadata: Metadata = {
   title: "Membership",
@@ -118,13 +118,12 @@ export default async function MembershipPage() {
             <figure className="reveal">
               <div className="media ratio-4x3">
                 <Image
-                  src={venueLounge}
+                  src={venuePoolRoom}
                   placeholder="blur"
-                  alt="A warmly lit lounge seating area with leather chairs — illustrative of the club atmosphere."
+                  alt="The pool table in the club lounge, with high-backed chairs and sofas behind it."
                   fill
                   sizes="(max-width: 899px) 100vw, 50vw"
                 />
-                <span className="media-tag">Illustrative image</span>
               </div>
             </figure>
           </div>

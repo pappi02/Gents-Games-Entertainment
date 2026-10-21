@@ -21,18 +21,28 @@ All images in this folder are stored as compressed WebP (max 1600px wide, metada
 
 ## Owner-provided images (October 2026)
 
-The business owner supplied 7 additional images directly (`owner-provided/` subfolder, plus `src/assets/venue-lounge.webp`), which replaced or supplemented the stock photos above for Pool, Chess, Cards, and Table Tennis, plus a venue/hero image used on the homepage and `/venue` page.
+The business owner supplied 7 additional images directly (`owner-provided/` subfolder), which replaced or supplemented the stock photos above for Cards and Table Tennis. The Pool, Chess and lounge images from that batch have since been replaced by real venue photos (next section) and deleted.
 
 | File | Used for |
 |---|---|
-| `owner-provided/pool-room.webp` | Pool — primary |
-| `owner-provided/pool-bar.webp` | Pool — secondary |
-| `owner-provided/chess-lounge.webp` | Chess — primary |
-| `owner-provided/chess-room.webp` | Chess — secondary |
 | `owner-provided/games-spread.webp` | Cards — primary |
 | `owner-provided/table-tennis-clean.webp` | Table Tennis — primary (replaces the Phase 5 Wikimedia photo) |
-| `src/assets/venue-lounge.webp` (static site asset, not in Storage) | Home hero / `/venue` atmosphere image |
 
 **Provenance/license not independently verified.** These were provided directly rather than sourced with a documented license trail the way the Wikimedia images above were. Several have the visual characteristics of AI-generated interior renders or stock/catalog photography (e.g. a furniture retailer's product listing), which commonly carry usage restrictions even when freely viewable. **Before any public launch, confirm the owner has the right to use these commercially** — either they were generated/taken by the owner (no issue), licensed from a stock provider with a commercial license, or otherwise cleared. `media_assets.license_note` on each of these rows flags this explicitly so it surfaces in the admin media view, not just here.
 
 Darts intentionally kept its existing Wikimedia photo (`darts.webp`) — no replacement was supplied, and the existing one already matches the visual quality bar.
+
+## Venue photography (October 2026)
+
+Real photos taken at the venue and supplied by the owner (`venue/` subfolder). Seeded with `media_assets.is_placeholder = false`, so the site shows them without an "Illustrative" label.
+
+| File | Used for |
+|---|---|
+| `venue/pool-table.webp` | Pool — primary |
+| `venue/pool-rack.webp` | Pool — secondary |
+| `venue/pool-table-lounge.webp` | Pool — third; same photo as `src/assets/venue-pool-room.webp` (static asset: home hero, `/venue` lead image, `/membership`) |
+| `venue/chess-board.webp` | Chess — primary |
+| `venue/chess-lounge-table.webp` | Chess — secondary |
+| `venue/chess-board-side.webp` | Chess — third |
+
+**Retired** with this batch (deleted from the repo; Storage objects replaced by `scripts/seed-media.mjs pool chess`): `owner-provided/pool-room.webp`, `owner-provided/pool-bar.webp`, `owner-provided/chess-lounge.webp`, `owner-provided/chess-room.webp`, `src/assets/venue-lounge.webp`.

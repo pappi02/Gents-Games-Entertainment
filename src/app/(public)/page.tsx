@@ -21,7 +21,7 @@ import { CategoryGameName } from "./_components/CategoryGameName";
 import { GamePicker, type PickerGame } from "./_components/GamePicker";
 import { PageTransition } from "./_components/PageTransition";
 import { Icon } from "./_components/Icon";
-import venueLounge from "@/assets/venue-lounge.webp";
+import venuePoolRoom from "@/assets/venue-pool-room.webp";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -132,14 +132,13 @@ export default async function HomePage() {
             <div className="home-hero-visual">
               <div className="media main">
                 <Image
-                  src={venueLounge}
-                  alt="A warmly lit lounge with leather seating — an illustration of the atmosphere the venue is built around."
+                  src={venuePoolRoom}
+                  alt="The pool table at The Gents, set in the lounge with high-backed chairs and sofas."
                   fill
                   priority
                   placeholder="blur"
                   sizes="(max-width: 899px) 100vw, 46vw"
                 />
-                <span className="media-tag">Illustrative image</span>
               </div>
               {insetGame && insetImage && (
                 <Link href={`/games/${insetGame.slug}`} className="hero-inset">

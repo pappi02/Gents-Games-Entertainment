@@ -7,7 +7,7 @@ import { primaryImage } from "@/lib/public/media";
 import { PageIntro } from "../_components/PageIntro";
 import { CategoryGameName } from "../_components/CategoryGameName";
 import { Icon } from "../_components/Icon";
-import venueLounge from "@/assets/venue-lounge.webp";
+import venuePoolRoom from "@/assets/venue-pool-room.webp";
 import { PageTransition } from "../_components/PageTransition";
 
 export const metadata: Metadata = {
@@ -50,8 +50,8 @@ export default async function VenuePage() {
           <p className="notice">
             <Icon name="info" />
             <span>
-              The images on this page show the style and atmosphere we&apos;re building toward — they aren&apos;t
-              photographs of the venue itself. Real photography of the space is on its way.
+              Photos without a label were taken at the venue. Anything marked &quot;Illustrative&quot; shows the style
+              we&apos;re going for, not the space itself, and will be replaced as we photograph more of it.
             </span>
           </p>
           <p className="notice">
@@ -70,16 +70,15 @@ export default async function VenuePage() {
                 <figure>
                   <div className="media">
                     <Image
-                      src={venueLounge}
+                      src={venuePoolRoom}
                       placeholder="blur"
-                      alt="A warmly lit lounge seating area with leather chairs — illustrative of the atmosphere at the venue."
+                      alt="The pool table in the lounge at the venue, with high-backed chairs and sofas behind it."
                       fill
                       priority
                       sizes="(max-width: 899px) 100vw, 50vw"
                     />
-                    <span className="media-tag">Illustrative image</span>
                   </div>
-                  <figcaption>Lounge atmosphere</figcaption>
+                  <figcaption>The lounge</figcaption>
                 </figure>
               </li>
               {gameShots.map(({ game, image }) => (

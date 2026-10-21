@@ -39,21 +39,27 @@ const admin = createClient(env.NEXT_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY,
 
 const OWNER_NOTE =
   "Provided directly by the business owner — provenance/license not independently verified. See supabase/seed-assets/LICENSES.md.";
+const VENUE_NOTE = "Photographed at the venue, supplied by the business owner (October 2026).";
 const COMMONS_NOTE = "Wikimedia Commons, free license — see supabase/seed-assets/LICENSES.md.";
 
 const GAMES = [
+  // Real photos of the venue (October 2026), so these go up with
+  // is_placeholder = false and the site shows them without an
+  // "Illustrative" label.
   {
     gameSlug: "pool",
     images: [
-      { file: "owner-provided/pool-room.webp", alt: "A moody, upscale pool room with a table set up for play.", note: OWNER_NOTE },
-      { file: "owner-provided/pool-bar.webp", alt: "A pool table racked and ready, cue resting on the rail.", note: OWNER_NOTE },
+      { file: "venue/pool-table.webp", alt: "The pool table at the venue, racked and ready with two cues on the cloth.", note: VENUE_NOTE, real: true },
+      { file: "venue/pool-rack.webp", alt: "A full rack of pool balls in the triangle, with cues resting on the table.", note: VENUE_NOTE, real: true },
+      { file: "venue/pool-table-lounge.webp", alt: "The pool table in the lounge, with high-backed chairs and sofas behind it.", note: VENUE_NOTE, real: true },
     ],
   },
   {
     gameSlug: "chess",
     images: [
-      { file: "owner-provided/chess-lounge.webp", alt: "Two chess tables set up in a lounge seating area.", note: OWNER_NOTE },
-      { file: "owner-provided/chess-room.webp", alt: "An elegant games room with a chess table at its center.", note: OWNER_NOTE },
+      { file: "venue/chess-board.webp", alt: "A chess set laid out for a new game on a round lounge table.", note: VENUE_NOTE, real: true },
+      { file: "venue/chess-lounge-table.webp", alt: "A chess board set up on a marble side table beside a lounge chair.", note: VENUE_NOTE, real: true },
+      { file: "venue/chess-board-side.webp", alt: "A chess set ready to play, seen from the side of the board.", note: VENUE_NOTE, real: true },
     ],
   },
   {
@@ -150,7 +156,7 @@ for (const { gameSlug, images } of GAMES.filter((g) => only.length === 0 || only
         storage_path: storagePath,
         mime_type: "image/webp",
         size_bytes: buffer.length,
-        is_placeholder: true,
+        is_placeholder: !img.real,
         license_note: img.note,
       })
       .select("id")
