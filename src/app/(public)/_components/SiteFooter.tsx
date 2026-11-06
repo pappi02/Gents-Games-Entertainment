@@ -3,6 +3,7 @@ import { getVenueSettings } from "@/lib/public/queries";
 import { contactLinks } from "@/lib/public/contact";
 import { formatPhone } from "@/lib/public/format";
 import { Brand } from "./Brand";
+import { SignOff } from "./SignOff";
 import { LEGAL_ITEMS, NAV_ITEMS, SISTER_BRAND } from "./nav";
 
 // Venue details come from the cached, tag-invalidated venue_settings read —
@@ -101,6 +102,7 @@ export async function SiteFooter() {
               ))}
             </ul>
           </nav>
+          <SignOff />
         </div>
       </div>
     </footer>
