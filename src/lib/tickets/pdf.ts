@@ -102,6 +102,10 @@ export async function buildTicketPdf(tickets: PdfTicket[]): Promise<Uint8Array> 
   for (const ticket of tickets) {
     const page = pdf.addPage([WIDTH, HEIGHT]);
     page.drawRectangle({ x: 0, y: 0, width: WIDTH, height: HEIGHT, color: PAPER });
+    // Drawn first, so the QR code sits on top of it and still scans cleanly.
+    if (ticket.sample) {
+      page.drawText("SAMPLE", { x: 62, y: 170, size: 96, font: bold, color: RED, opacity: 0.14, rotate: degrees(45) });
+    }
 
     page.drawRectangle({ x: 0, y: HEIGHT - 68, width: WIDTH, height: 68, color: INK });
     page.drawRectangle({ x: 0, y: HEIGHT - 72, width: WIDTH, height: 4, color: RED });
@@ -176,7 +180,6 @@ export async function buildTicketPdf(tickets: PdfTicket[]): Promise<Uint8Array> 
       const banner = "SAMPLE TICKET - NOT VALID FOR ENTRY";
       page.drawRectangle({ x: 0, y: 6, width: WIDTH, height: 24, color: RED });
       page.drawText(banner, { x: (WIDTH - bold.widthOfTextAtSize(banner, 11)) / 2, y: 14, size: 11, font: bold, color: PAPER });
-      page.drawText("SAMPLE", { x: 62, y: 170, size: 96, font: bold, color: RED, opacity: 0.14, rotate: degrees(45) });
     }
   }
 
