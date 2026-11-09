@@ -254,3 +254,114 @@
   font-size: 0.9rem;
   max-width: 70ch;
 }
+
+/* Events, ticket sales, discount codes and door check-in */
+
+.admin-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.admin-page-header h1 { margin: 0; }
+
+.admin-button-link {
+  background: #b8202e;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.admin-form-heading {
+  font-size: 1rem;
+  margin: 0.75rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.admin-form-heading:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+
+.admin-poster-preview { max-width: 180px; height: auto; border-radius: 4px; }
+
+.admin-actions-wrap { flex-wrap: wrap; }
+
+.admin-warning,
+.admin-notice {
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.admin-warning { background: #fff3cd; color: #5f4800; }
+.admin-notice { background: #d7f3dd; color: #19692c; }
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.admin-stat { background: white; padding: 0.85rem; border-radius: 6px; }
+.admin-stat-value { font-size: 1.25rem; font-weight: 700; }
+.admin-stat-line { font-size: 1.1rem; margin: 1rem 0; }
+
+.admin-orders { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+
+.admin-order { background: white; padding: 0.75rem; border-radius: 6px; font-size: 0.9rem; }
+.admin-order summary { cursor: pointer; }
+.admin-order-paid { background: #d7f3dd; color: #19692c; }
+.admin-order-pending { background: #fff3cd; color: #5f4800; }
+.admin-order-expired,
+.admin-order-cancelled { background: #eee; color: #555; }
+.admin-order-needs_review,
+.admin-order-refunded { background: #f3d7d7; color: #8a1f1f; }
+
+.admin-order-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.25rem 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.admin-order-facts dt { font-weight: 600; }
+.admin-order-facts dd { margin: 0; overflow-wrap: anywhere; }
+.admin-order-actions { margin: 0.6rem 0; }
+
+.admin-inline-form { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+
+.admin-inline-form input {
+  flex: 1 1 12rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.admin-content .admin-inline-form button[type="submit"] { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+
+.admin-door-result {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: white;
+}
+
+.admin-door-ok { background: #1b6a37; }
+.admin-door-bad { background: #9a1a26; }
+.admin-door-detail { font-size: 0.85rem; font-weight: 400; margin-top: 0.25rem; }
+
+/* The admin area is used on phones at the door. */
+@media (max-width: 720px) {
+  .admin-shell { flex-direction: column; }
+  .admin-sidebar { width: auto; }
+  .admin-sidebar nav { flex-direction: row; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .admin-content { padding: 1rem; max-width: 100%; }
+  .admin-table { display: block; overflow-x: auto; }
+}

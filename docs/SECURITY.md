@@ -24,6 +24,7 @@ Applies to the public website, admin dashboard, database, media uploads, and enq
 | Manage games/categories | ✅ | ✅ | ❌ |
 | Edit pricing | ✅ | Optional configurable permission | ❌ |
 | Publish events/promotions | ✅ | ✅ (if authorised) | ❌ |
+| Ticket sales, discounts, refunds, door check-in | See [EVENT_TICKETING.md](EVENT_TICKETING.md) §6 | See §6 | Door check-in only |
 | View/manage enquiries | ✅ | Optional | ✅ |
 | Manage administrators | ✅ | ❌ | ❌ |
 | View audit logs | ✅ | ❌ | ❌ |
@@ -69,6 +70,10 @@ Layered protection rather than a single CAPTCHA:
 - Generic responses that avoid revealing whether private records exist.
 - Appropriate retention/deletion procedures for personal information.
 - Avoid permanent IP blocking from a single failed request — account for shared networks/mobile carriers.
+
+## 6a. Event Tickets
+
+Ticket forgery, duplication, payment confirmation and download protection, including what they do not stop, are covered in [EVENT_TICKETING.md](EVENT_TICKETING.md) §4–§5.
 
 ## 7. Security Verification Checklist (pre-production, minimum)
 

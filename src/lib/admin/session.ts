@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export type AdminRole = "super_admin" | "content_editor" | "enquiry_staff";
@@ -36,4 +37,15 @@ export async function getAdminProfile(): Promise<AdminProfile | null> {
 
 export function hasRole(profile: AdminProfile | null, roles: AdminRole[]): boolean {
   return !!profile && roles.includes(profile.role);
+}
+
+/**
+ * Guard for Server Actions that use the service-role client, where RLS is not
+ * doing the job. Sends anyone without the role away before any work happens.
+ */
+export async function requireRole(roles: AdminRole[]): Promise<AdminProfile> {
+  const profile = await getAdminProfile();
+  if (!profile) redirect("/admin/login");
+  if (!roles.includes(profile.role)) redirect("/admin");
+  return profile;
 }

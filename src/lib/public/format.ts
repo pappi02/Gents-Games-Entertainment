@@ -40,3 +40,13 @@ export function formatPhone(phone: string) {
 export function hasEnded(event: { start_at: string; end_at: string | null }) {
   return new Date(event.end_at ?? event.start_at).getTime() < Date.now();
 }
+
+/** Whether a timestamp has passed, judged against the request time. */
+export function isPast(iso: string) {
+  return new Date(iso).getTime() <= Date.now();
+}
+
+/** A UTC timestamp the given number of days before the request time. */
+export function isoDaysAgo(days: number) {
+  return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+}

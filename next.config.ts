@@ -7,6 +7,10 @@ const supabaseHostname = process.env.NEXT_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // The PDF route reads the logo from disk at runtime, so it must be deployed with it.
+  outputFileTracingIncludes: {
+    "/tickets/\\[token\\]/pdf": ["./public/brand/gents-mark.png"],
+  },
   cacheComponents: true,
   partialPrefetching: true,
   images: {

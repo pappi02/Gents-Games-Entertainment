@@ -4,7 +4,7 @@ Instructions for any AI coding agent working in this repository. Read this first
 
 ## Project Summary
 
-A standalone, mobile-first website for **The Gents Games & Entertainment** — a sister brand to The Gents Playhouse — advertising the games and recreation available at a physical venue in Nairobi, Kenya, and converting visitors into physical visits and group enquiries. It is **not** an online booking or payment platform in v1: visitor interaction is enquiry-based only.
+A standalone, mobile-first website for **The Gents Games & Entertainment** — a sister brand to The Gents Playhouse — advertising the games and recreation available at a physical venue in Nairobi, Kenya, and converting visitors into physical visits and group enquiries. It is **not** an online booking or payment platform in v1: visitor interaction is enquiry-based only, with one owner-requested exception, event tickets ([EVENT_TICKETING.md](EVENT_TICKETING.md)).
 
 Full specs:
 - [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) — scope, catalogue, site structure, admin requirements
@@ -15,6 +15,7 @@ Full specs:
 - [CODE_STYLE.md](CODE_STYLE.md) — coding conventions for this repo
 - [TESTING.md](TESTING.md) — accessibility, performance, security, and pre-launch checklists
 - [MEMBERSHIP_AND_LEISURE_EXPANSION.md](MEMBERSHIP_AND_LEISURE_EXPANSION.md) — membership tiers, leisure/entertainment/casino-style proposals and their launch rules
+- [EVENT_TICKETING.md](EVENT_TICKETING.md) — ticket sales, discount codes, signed tickets, door check-in, go-live checklist
 
 ## The One Rule That Overrides Everything Else
 
@@ -28,7 +29,7 @@ Full specs:
 ## Working Agreements
 
 - Don't assume a tech stack is already chosen — check the repo state before scaffolding; [ARCHITECTURE_AND_DATA.md](ARCHITECTURE_AND_DATA.md) §2 is a suggested default, not a mandate.
-- Out of scope for v1 (do not build unless explicitly asked): online payments, guaranteed/auto-confirmed bookings, public user accounts, real-time occupancy tracking, gambling/wagering functionality, unverified testimonials/ratings/awards.
+- Out of scope for v1 (do not build unless explicitly asked): online payments other than event tickets, guaranteed/auto-confirmed bookings, public user accounts, real-time occupancy tracking, gambling/wagering functionality, unverified testimonials/ratings/awards.
 - Admin mutations are always server-authorized — never rely on hiding a UI element as an access control.
 - Any change touching pricing, facility status, enquiry data, or admin auth gets checked against [SECURITY.md](SECURITY.md) before being considered done.
 - Respect `prefers-reduced-motion`; never encode status by colour alone.

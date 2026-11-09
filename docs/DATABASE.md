@@ -14,6 +14,7 @@ Use the existing project's database technology if integrating into one. If start
 - **game_media** — id, game_id, media asset ID/storage key, alt text, caption, sort order, media type, optional poster/video metadata.
 - **pricing_options** — id, game_id (or related service), currency, amount, billing unit, duration, conditions, effective dates, active status.
 - **events** — id, slug, title, description, start/end time, timezone, event status, registration instructions, capacity (if confirmed), price (if applicable), SEO fields.
+- **ticket_types, discount_codes, ticket_orders, tickets** and support tables — see [EVENT_TICKETING.md](EVENT_TICKETING.md) and the `event_ticketing` migration. `ticket_types`, not `events.price_minor_units`, is the source of truth for a ticketed event's price.
 - **enquiries** — id, public reference, contact name, email, phone, enquiry type, related game/event, requested visit time, party size, message, status, assignee, timestamps.
 - **venue_settings** — verified address, map link, contact channels, timezone, opening hours, holiday notices, social links, brand details, configuration metadata.
 - **media_assets** — managed media metadata and file ownership.

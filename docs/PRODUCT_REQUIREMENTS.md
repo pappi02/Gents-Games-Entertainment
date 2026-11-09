@@ -37,13 +37,14 @@ Some activities already exist at the venue; others are planned. The website **mu
 - Configurable pricing and facility status (via admin — no hardcoded prices).
 - Events, tournaments, and group entertainment information.
 - Enquiry forms with clear contact/directions actions (no online payment).
+- Event ticket sales with online payment, added at the owner's request. See [EVENT_TICKETING.md](EVENT_TICKETING.md).
 - New authenticated admin dashboard with role-based access.
 - Database, media management, validation, and auditability.
 - SEO, accessibility (WCAG 2.2 AA target), analytics readiness, security, automated tests, deployment docs.
 
 ## 5. Out of Scope (v1)
 
-- Online payments, deposits, refunds.
+- Online payments, deposits and refunds, other than event tickets.
 - Guaranteed/auto-confirmed reservations (enquiry only, not booking).
 - Public user accounts, online membership sign-up, or membership payments. (Membership tiers can be shown and enquired about; see [MEMBERSHIP_AND_LEISURE_EXPANSION.md](MEMBERSHIP_AND_LEISURE_EXPANSION.md).)
 - Real-time equipment scheduling or occupancy tracking.

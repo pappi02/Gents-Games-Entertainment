@@ -1,22 +1,31 @@
 import type { Metadata } from "next";
 import { pageOpenGraph } from "@/lib/public/seo";
+import Image from "next/image";
 import Link from "next/link";
 import { getPublishedEvents, getVenueSettings } from "@/lib/public/queries";
-import { formatEventDate } from "@/lib/public/format";
+import { formatEventDate, formatMoney } from "@/lib/public/format";
+import { eventPosterUrl, getTicketAvailability, SALE_STATE_LABEL } from "@/lib/public/tickets";
 import { PageIntro } from "../_components/PageIntro";
 import { ContactActions } from "../_components/ContactActions";
 import { Icon } from "../_components/Icon";
 import { PageTransition } from "../_components/PageTransition";
 
+// Ticket availability is live, so this page can't be served from a prerender.
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "Events",
-  description: "Upcoming tournaments and events at The Gents Games & Entertainment.",
+  description: "Upcoming parties, tournaments and events at The Gents Games & Entertainment.",
   alternates: { canonical: "/events" },
   openGraph: pageOpenGraph("Events", "/events"),
 };
 
 export default async function EventsPage() {
-  const [events, venue] = await Promise.all([getPublishedEvents(), getVenueSettings()]);
+  const [events, venue, availability] = await Promise.all([
+    getPublishedEvents(),
+    getVenueSettings(),
+    getTicketAvailability(),
+  ]);
 
   return (
     <PageTransition>
@@ -55,13 +64,26 @@ export default async function EventsPage() {
               <ol className="event-list reveal-group">
                 {events.map((e) => {
                   const d = formatEventDate(e.start_at, e.timezone);
+                  const ticket = availability.find((a) => a.event_id === e.id);
+                  const cancelled = Boolean(e.cancelled_at);
                   return (
-                    <li key={e.id} className="event-row">
-                      <span className="date-block" aria-hidden="true">
-                        <span className="dow">{d.weekday}</span>
-                        <span className="day">{d.day}</span>
-                        <span className="mon">{d.month}</span>
-                      </span>
+                    <li key={e.id} className={`event-row${e.poster_path ? " event-row-poster" : ""}`}>
+                      {e.poster_path ? (
+                        <span className="event-poster-thumb">
+                          <Image
+                            src={eventPosterUrl(e.poster_path)}
+                            alt={e.poster_alt ?? `Poster for ${e.title}`}
+                            fill
+                            sizes="96px"
+                          />
+                        </span>
+                      ) : (
+                        <span className="date-block" aria-hidden="true">
+                          <span className="dow">{d.weekday}</span>
+                          <span className="day">{d.day}</span>
+                          <span className="mon">{d.month}</span>
+                        </span>
+                      )}
                       <div className="event-main">
                         <h2 className="event-title">
                           <Link href={`/events/${e.slug}`}>{e.title}</Link>
@@ -71,6 +93,17 @@ export default async function EventsPage() {
                             {d.full} · {d.time}
                           </time>
                         </p>
+                        {cancelled ? (
+                          <p className="ticket-state ticket-state-cancelled">Cancelled</p>
+                        ) : (
+                          ticket && (
+                            <p className={`ticket-state ticket-state-${ticket.state}`}>
+                              {SALE_STATE_LABEL[ticket.state]}
+                              {ticket.state === "on_sale" &&
+                                ` · ${formatMoney(ticket.price_minor_units, ticket.currency)}`}
+                            </p>
+                          )
+                        )}
                         <p className="muted">{e.description}</p>
                       </div>
                       <span className="category-arrow" aria-hidden="true">
