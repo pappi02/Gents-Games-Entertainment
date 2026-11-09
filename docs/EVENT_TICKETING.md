@@ -18,7 +18,7 @@ Online ticket sales for events: posters, one ticket type per event, discount cod
 
 Sales stay switched off, and the site shows tickets as not on sale, until `PAYSTACK_SECRET_KEY`, the signing keys and `SUPABASE_SERVICE_ROLE_KEY` are all set.
 
-1. **Apply the database migration first**: `supabase/migrations/20261109120000_event_ticketing.sql`. The new code needs it, so deploy the code afterwards.
+1. **Database migration:** `supabase/migrations/20261109120000_event_ticketing.sql` is already applied to the live project (2026-11-09). Apply it first on any new environment, because the code needs it.
 2. **Signing keys:** run `node scripts/generate-ticket-keys.mjs` once per environment and store the output in the host's secret settings. Back up the production values somewhere safe: losing the private key means new tickets can't be signed and issued tickets can't be re-downloaded.
 3. **Paystack:** create the account and put the secret key in `PAYSTACK_SECRET_KEY`. Set the webhook URL to `<site>/api/webhooks/paystack`. Confirm with Paystack that M-Pesa is enabled, and what the KES minimum charge is (the code assumes KES 10 is safe).
 4. **Resend:** verify a sending domain, then set `EMAIL_PROVIDER_API_KEY` and `EMAIL_FROM_ADDRESS`.
@@ -110,4 +110,6 @@ PGlite has a single connection, so parallel behaviour was tested separately, onc
 | The same ticket scanned 30 times at once | 1 admitted, 29 refused |
 | 20,000 generated ticket IDs | All unique |
 
-**Not yet tested:** a real Paystack payment, real email delivery, a real phone scanning a printed ticket, and the migration on the live Supabase project. All of these need the accounts in §2. Stand-ins replaced Supabase's auth and storage in the tests above, so storage policies and the poster upload haven't run against real Supabase either.
+The migration was applied to the live project on 2026-11-09. On that database, the public API was refused access to orders, tickets, discount codes and internal functions. Poster storage accepted WebP, rejected SVG and refused public uploads. A full sale with a discount, payment confirmation and double scan as a real admin passed inside a transaction that was rolled back.
+
+**Not yet tested:** a real Paystack payment, real email delivery, a real phone scanning a printed ticket, and the admin screens and checkout clicked through by a person with real data. These need the accounts in §2.
