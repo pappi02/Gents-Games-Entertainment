@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPublishedEvents, getVenueSettings } from "@/lib/public/queries";
 import { formatEventDate, formatMoney } from "@/lib/public/format";
-import { eventPosterUrl, getTicketAvailability, SALE_STATE_LABEL } from "@/lib/public/tickets";
+import { eventPosterUrl, getDemoEvents, getTicketAvailability, SALE_STATE_LABEL } from "@/lib/public/tickets";
+import { DemoBanner } from "../_components/DemoBanner";
 import { PageIntro } from "../_components/PageIntro";
 import { ContactActions } from "../_components/ContactActions";
 import { Icon } from "../_components/Icon";
@@ -21,11 +22,14 @@ export const metadata: Metadata = {
 };
 
 export default async function EventsPage() {
-  const [events, venue, availability] = await Promise.all([
+  const [realEvents, demoEvents, venue, availability] = await Promise.all([
     getPublishedEvents(),
+    getDemoEvents(),
     getVenueSettings(),
     getTicketAvailability(),
   ]);
+
+  const events = [...demoEvents, ...realEvents];
 
   return (
     <PageTransition>
@@ -42,6 +46,7 @@ export default async function EventsPage() {
 
         <section className="section theme-light" aria-label="Upcoming events">
           <div className="container">
+            {demoEvents.length > 0 && <DemoBanner />}
             {events.length === 0 ? (
               <div className="empty-state reveal">
                 <Icon name="calendar" className="panel-icon" />

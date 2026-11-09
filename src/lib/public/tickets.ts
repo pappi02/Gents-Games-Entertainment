@@ -1,6 +1,7 @@
 import { createPublicClient } from "@/lib/supabase/public";
 import { publicImageUrl } from "@/lib/public/media";
-import { ticketingReady } from "@/lib/tickets/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { demoTicketingReady, ticketingReady } from "@/lib/tickets/server";
 
 export type SaleState =
   | "on_sale"
@@ -30,14 +31,32 @@ export type TicketAvailability = {
  */
 export async function getTicketAvailability(eventId?: string): Promise<TicketAvailability[]> {
   const { data, error } = await createPublicClient().rpc("ticket_availability", { p_event_id: eventId ?? null });
-  if (error || !data) return [];
-  const ready = ticketingReady();
-  return (data as TicketAvailability[]).map((row) => ({
+  const real = withReadiness(error || !data ? [] : (data as TicketAvailability[]), ticketingReady());
+  if (!demoTicketingReady()) return real;
+
+  const { data: demo } = await createAdminClient().rpc("demo_ticket_availability", { p_event_id: eventId ?? null });
+  return [...real, ...withReadiness((demo as TicketAvailability[] | null) ?? [], true)];
+}
+
+function withReadiness(rows: TicketAvailability[], ready: boolean): TicketAvailability[] {
+  return rows.map((row) => ({
     ...row,
     price_minor_units: Number(row.price_minor_units),
     state: !ready && row.state === "on_sale" ? "closed" : row.state,
     can_buy: !ready ? 0 : row.can_buy,
   }));
+}
+
+/** Sample events, which RLS hides from the public. Only ever read when demo mode is on, and never cached. */
+export async function getDemoEvents() {
+  if (!demoTicketingReady()) return [];
+  const { data } = await createAdminClient()
+    .from("events")
+    .select("*")
+    .eq("is_demo", true)
+    .eq("publication_status", "published")
+    .order("start_at");
+  return data ?? [];
 }
 
 /** Never colour alone: each state always renders with this text. */
@@ -53,5 +72,6 @@ export const SALE_STATE_LABEL: Record<SaleState, string> = {
 };
 
 export function eventPosterUrl(path: string) {
-  return publicImageUrl("event-media", path);
+  // The built-in sample poster ships with the site. Uploaded posters are in storage.
+  return path.startsWith("/") ? path : publicImageUrl("event-media", path);
 }

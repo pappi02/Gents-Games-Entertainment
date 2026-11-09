@@ -59,13 +59,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         location: event.location_note,
         verifyUrl: verifyUrl(signed),
         token: signed,
+        sample: event.is_demo,
       };
     }),
   );
 
   await Promise.all(tickets.map((ticket) => logAccess(order.id, ticket.id, "pdf_download")));
 
-  const filename = tickets.length === 1 ? `ticket-${tickets[0].ticket_code}.pdf` : `tickets-${order.reference.slice(0, 12)}.pdf`;
+  const filename = tickets.length === 1 ? `${event.is_demo ? "sample-" : ""}ticket-${tickets[0].ticket_code}.pdf` : `tickets-${order.reference.slice(0, 12)}.pdf`;
   return new Response(Buffer.from(bytes), {
     headers: {
       "Content-Type": "application/pdf",

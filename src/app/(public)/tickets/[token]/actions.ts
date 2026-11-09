@@ -5,10 +5,11 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { accessCookieName, createAccessSession, hashAccessCode, parseOrderLinkToken } from "@/lib/tickets/crypto";
+import { demoModeEnabled } from "@/lib/tickets/demo";
 import { sendAccessCodeEmail } from "@/lib/tickets/email";
 import { clientIpHash, getOrder, getOrderEvent, logAccess, withinRateLimit } from "@/lib/tickets/server";
 
-export type AccessState = { sent: boolean; error: string | null };
+export type AccessState = { sent: boolean; error: string | null; demoCode?: string };
 
 /** The address is never taken from the visitor: a code only ever goes to the buyer's email on the order. */
 export async function requestAccessCode(token: string): Promise<AccessState> {
@@ -30,6 +31,11 @@ export async function requestAccessCode(token: string): Promise<AccessState> {
   if (error) return { sent: false, error: "We couldn't create a code. Please try again." };
 
   const event = await getOrderEvent(order.event_id);
+  // A demo sends no email, so the code is shown on screen. Only ever for sample events in demo mode.
+  if (event?.is_demo && demoModeEnabled()) {
+    await logAccess(order.id, null, "access_code_sent", "demo");
+    return { sent: true, error: null, demoCode: code };
+  }
   const sendError = await sendAccessCodeEmail({ to: order.buyer_email, code, eventTitle: event?.title ?? "your event" });
   await logAccess(order.id, null, "access_code_sent", sendError ?? undefined);
   if (sendError) return { sent: false, error: "We couldn't send the code. Please try again or contact us." };
@@ -58,7 +64,7 @@ export async function verifyAccessCode(token: string, _prev: AccessState, formDa
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    path: "/tickets",
+    path: "/",
     maxAge: 12 * 60 * 60,
   });
   redirect(`/tickets/${token}`);

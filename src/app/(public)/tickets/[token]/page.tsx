@@ -15,6 +15,7 @@ import {
   ticketToken,
   verifyUrl,
 } from "@/lib/tickets/server";
+import { DemoBanner } from "../../_components/DemoBanner";
 import { Icon } from "../../_components/Icon";
 import { PageTransition } from "../../_components/PageTransition";
 import { AccessForm } from "./AccessForm";
@@ -71,7 +72,10 @@ export default async function TicketsPage({
 
   // The webhook normally confirms first. This covers a delayed or lost webhook.
   // It asks Paystack directly, so visiting this URL can't fake a payment.
-  if (order.status === "pending" && (hasSession || from === "payment")) {
+  const event = await getOrderEvent(order.event_id);
+  if (!event) notFound();
+
+  if (order.status === "pending" && !event.is_demo && (hasSession || from === "payment")) {
     try {
       await syncOrderPayment(order.reference);
       order = (await getOrder(order.id)) ?? order;
@@ -80,8 +84,6 @@ export default async function TicketsPage({
     }
   }
 
-  const event = await getOrderEvent(order.event_id);
-  if (!event) notFound();
   const when = formatEventDate(event.start_at, event.timezone);
 
   if (order.status === "pending") {
@@ -168,6 +170,7 @@ export default async function TicketsPage({
   const cards = await Promise.all(
     visible.map(async (ticket) => ({
       ticket,
+      scanPath: `/verify/${ticketToken(ticket)}`,
       qr:
         ticket.status === "valid"
           ? await QRCode.toDataURL(verifyUrl(ticketToken(ticket)), { errorCorrectionLevel: "M", margin: 2, width: 320 })
@@ -177,6 +180,7 @@ export default async function TicketsPage({
 
   return (
     <Shell title={event.title}>
+      {event.is_demo && <DemoBanner />}
       <p className="muted">
         {when.full}, {when.time} (Nairobi time){event.location_note ? ` · ${event.location_note}` : ""}
       </p>
@@ -186,7 +190,7 @@ export default async function TicketsPage({
           <span>This event has been cancelled. Please contact us about your refund.</span>
         </p>
       )}
-      {order.email_error && (
+      {order.email_error && !event.is_demo && (
         <p className="notice">
           <Icon name="info" />
           <span>We couldn&apos;t email your ticket link, so please bookmark this page or download your tickets now.</span>
@@ -209,7 +213,7 @@ export default async function TicketsPage({
       )}
 
       <ul className="ticket-grid">
-        {cards.map(({ ticket, qr }, index) => (
+        {cards.map(({ ticket, qr, scanPath }, index) => (
           <li key={ticket.id} className="ticket-card">
             <p className="eyebrow">
               {ticketTypeName} · Ticket {index + 1} of {cards.length}
@@ -225,6 +229,11 @@ export default async function TicketsPage({
             )}
             <p className="ticket-code">{ticket.ticket_code}</p>
             <p className="subtle">Status: {TICKET_STATUS_LABEL[ticket.status]}</p>
+            {event.is_demo && (
+              <a href={scanPath} className="text-link">
+                Simulate scanning this QR code
+              </a>
+            )}
             {ticket.status === "valid" && (
               <a href={`/tickets/${token}/pdf?ticket=${ticket.ticket_code}`} className="btn btn-secondary btn-sm">
                 Download PDF

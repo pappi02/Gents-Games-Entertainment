@@ -21,6 +21,11 @@ export function AccessForm({ token, maskedEmail }: { token: string; maskedEmail:
           <strong>{error}</strong>
         </div>
       )}
+      {requested.demoCode && (
+        <p className="demo-banner" role="note">
+          <strong>Demo:</strong> in the live system this code goes to the buyer&apos;s email. Your code is <strong>{requested.demoCode}</strong>.
+        </p>
+      )}
       {sent && (
         <form action={verify} className="form">
           <div className="field">

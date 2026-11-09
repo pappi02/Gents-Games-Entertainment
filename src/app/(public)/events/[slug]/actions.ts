@@ -3,9 +3,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { accessCookieName, createAccessSession } from "@/lib/tickets/crypto";
+import { accessCookieName, createAccessSession, orderLinkToken } from "@/lib/tickets/crypto";
+import { demoModeEnabled } from "@/lib/tickets/demo";
 import { initializeTransaction } from "@/lib/tickets/paystack";
-import { clientIpHash, orderLink, ticketingReady, withinRateLimit } from "@/lib/tickets/server";
+import { clientIpHash, demoTicketingReady, orderLink, ticketingReady, withinRateLimit } from "@/lib/tickets/server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,6 +27,9 @@ export async function quoteTickets(ticketTypeId: string, quantity: number, code:
   if (!UUID.test(ticketTypeId) || !Number.isInteger(quantity) || code.length > 32) {
     return { ...empty, error: "That code isn't valid for this order." };
   }
+  if ((await isDemoTicketType(ticketTypeId)) && !demoModeEnabled()) {
+    return { ...empty, error: "That code isn't valid for this order." };
+  }
   // Limits code guessing without penalising a venue-wide shared connection much.
   if (!(await withinRateLimit(`quote:${await clientIpHash()}`, 30, 600))) {
     return { ...empty, error: "Too many attempts. Please wait a few minutes and try again." };
@@ -39,6 +43,11 @@ export async function quoteTickets(ticketTypeId: string, quantity: number, code:
   if (error || !row) return { ...empty, error: "We couldn't check that code. Please try again." };
   if (row.error) return { ...empty, error: row.error };
   return { error: null, discount: Number(row.discount_minor_units), total: Number(row.total_minor_units), code: row.discount_code };
+}
+
+async function isDemoTicketType(ticketTypeId: string) {
+  const { data } = await createAdminClient().from("ticket_types").select("events!inner(is_demo)").eq("id", ticketTypeId).maybeSingle();
+  return (data?.events as unknown as { is_demo: boolean } | undefined)?.is_demo === true;
 }
 
 export type CheckoutField = "quantity" | "buyer_name" | "buyer_email" | "age_confirm";
@@ -77,7 +86,11 @@ export async function startTicketCheckout(_prev: CheckoutState, formData: FormDa
   }
   if (Object.keys(fieldErrors).length > 0) return { error: "Please check the highlighted fields.", fieldErrors };
 
-  if (!ticketingReady()) return { error: "Tickets aren't on sale right now. Please check back soon.", fieldErrors: {} };
+  // A sample event can only be bought in demo mode, and a real one only with real payments configured.
+  const isDemo = await isDemoTicketType(ticketTypeId);
+  if (isDemo ? !demoTicketingReady() : !ticketingReady()) {
+    return { error: "Tickets aren't on sale right now. Please check back soon.", fieldErrors: {} };
+  }
 
   const ipHash = await clientIpHash();
   const allowed =
@@ -98,6 +111,21 @@ export async function startTicketCheckout(_prev: CheckoutState, formData: FormDa
   if (error || !reservation) return { error: "We couldn't start your order. Please try again.", fieldErrors: {} };
   if (reservation.error) return { error: reservation.error, fieldErrors: {} };
 
+  async function setSession() {
+    (await cookies()).set(accessCookieName(reservation.order_id), createAccessSession(reservation.order_id), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 12 * 60 * 60,
+    });
+  }
+
+  if (isDemo) {
+    await setSession();
+    redirect(`/demo-pay/${orderLinkToken(reservation.order_id)}`);
+  }
+
   let authorizationUrl: string;
   try {
     ({ authorizationUrl } = await initializeTransaction({
@@ -115,13 +143,7 @@ export async function startTicketCheckout(_prev: CheckoutState, formData: FormDa
 
   // This browser started the order, so it can open the tickets without an
   // emailed code. HttpOnly, so page scripts can't read it.
-  (await cookies()).set(accessCookieName(reservation.order_id), createAccessSession(reservation.order_id), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/tickets",
-    maxAge: 12 * 60 * 60,
-  });
+  await setSession();
 
   redirect(authorizationUrl);
 }

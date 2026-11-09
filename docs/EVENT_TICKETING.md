@@ -95,6 +95,19 @@ The signature is a security feature. Whether it meets any legal definition of an
 - Poster uploads are capped at 4 MB to stay under the host's request limit.
 - Retention periods for ticket data still need deciding (docs/SECURITY.md §8).
 
+## 10. Demo mode
+
+For presenting the system. Set `TICKET_DEMO_MODE=true` on a Preview deployment or locally, with the signing keys and `SUPABASE_SERVICE_ROLE_KEY`. It is ignored when `VERCEL_ENV=production`. `/demo` is the presenter guide.
+
+Everything is the real code except that payment is a simulated page and no email is sent (download codes appear on screen). It applies only to rows flagged `is_demo`:
+
+- RLS and `ticket_availability` hide demo events from the public, including on deployed code without demo mode.
+- Demo discount codes can't apply to real events, and events and codes created in demo mode are flagged automatically.
+- PDFs say "SAMPLE TICKET - NOT VALID FOR ENTRY". Demo tickets skip the check-in time window, and can be deleted.
+- **Reset demo data** on the admin events page removes sample orders and tickets and anything created during a demo, keeping the sample event.
+
+A demo uses the live database. Other admin actions, such as editing a real event, are real even in demo mode.
+
 ## 9. Test evidence
 
 `npm test` runs in CI: signature forgery and tampering, access tokens, the webhook signature, money and time parsing, CSV formula injection, PDF generation, and the real migrations on PGlite (sales limits, discounts, payment confirmation, check-in, tamper guards and role permissions).

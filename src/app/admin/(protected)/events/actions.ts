@@ -3,6 +3,7 @@
 import sharp from "sharp";
 import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/admin/session";
+import { demoModeEnabled } from "@/lib/tickets/demo";
 import { kesToMinorUnits, nairobiInputToUtc, slugify } from "@/lib/tickets/format";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
@@ -106,7 +107,7 @@ export async function saveEvent(eventId: string | null, formData: FormData) {
   } else {
     const { data, error } = await supabase
       .from("events")
-      .insert({ ...fields, slug: await uniqueSlug(supabase, title), created_by: profile.id })
+      .insert({ ...fields, slug: await uniqueSlug(supabase, title), created_by: profile.id, is_demo: demoModeEnabled() })
       .select("id")
       .single();
     if (error || !data) back(formPath, error?.message ?? "Couldn't create the event.");
@@ -155,6 +156,16 @@ export async function saveEvent(eventId: string | null, formData: FormData) {
 
   refresh(id!);
   redirect("/admin/events");
+}
+
+/** Clears sample orders and anything created during a demo. Real data is untouched. */
+export async function resetDemoData() {
+  await requireRole(["super_admin"]);
+  if (!demoModeEnabled()) redirect("/admin/events");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("admin_reset_demo");
+  if (error) back("/admin/events", error.message);
+  refresh();
 }
 
 export async function updateEventStatus(eventId: string, status: "draft" | "published" | "archived") {

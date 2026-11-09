@@ -3,7 +3,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatEventDate, formatMoney } from "@/lib/public/format";
 import { ticketingReady } from "@/lib/tickets/server";
-import { cancelEvent, setTicketSales, updateEventStatus } from "./actions";
+import { demoModeEnabled } from "@/lib/tickets/demo";
+import { cancelEvent, resetDemoData, setTicketSales, updateEventStatus } from "./actions";
 
 type TicketType = {
   id: string;
@@ -39,7 +40,16 @@ export default async function AdminEventsPage({
         </Link>
       </div>
       {error && <p className="admin-auth-error">{error}</p>}
-      {!ticketingReady() && (
+      {demoModeEnabled() && (
+        <div className="admin-warning">
+          <strong>Demo mode.</strong> Payments are simulated and no emails are sent. New events are marked as samples and hidden
+          from the public site. <a href="/demo">Presenter guide</a>
+          <form action={resetDemoData} style={{ marginTop: "0.5rem" }}>
+            <button type="submit">Reset demo data</button>
+          </form>
+        </div>
+      )}
+      {!ticketingReady() && !demoModeEnabled() && (
         <p className="admin-warning">
           Online sales are switched off because the payment or ticket-signing settings are missing, so the site shows tickets
           as not on sale. See docs/EVENT_TICKETING.md.
@@ -73,6 +83,7 @@ export default async function AdminEventsPage({
                 <td>
                   <span className={`admin-badge admin-badge-${e.publication_status}`}>{e.publication_status}</span>
                   {e.cancelled_at && <span className="admin-badge admin-badge-archived"> cancelled</span>}
+                  {e.is_demo && <span className="admin-badge admin-badge-coming_soon"> sample</span>}
                 </td>
                 <td>
                   {ticket ? (

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/admin/session";
 import { createClient } from "@/lib/supabase/server";
+import { demoModeEnabled } from "@/lib/tickets/demo";
 import { kesToMinorUnits, nairobiInputToUtc } from "@/lib/tickets/format";
 
 const PATH = "/admin/discount-codes";
@@ -54,6 +55,7 @@ export async function createDiscountCode(formData: FormData) {
       max_uses: maxUses,
       note: text("note") || null,
       created_by: profile.id,
+      is_demo: demoModeEnabled(),
     })
     .select("id")
     .single();

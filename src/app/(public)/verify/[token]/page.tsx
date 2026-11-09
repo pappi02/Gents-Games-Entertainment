@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getAdminProfile } from "@/lib/admin/session";
 import { formatEventDate } from "@/lib/public/format";
 import { clientIpHash, loadVerifiedTicket, maskName, withinRateLimit } from "@/lib/tickets/server";
+import { DemoBanner } from "../../_components/DemoBanner";
 import { Icon } from "../../_components/Icon";
 import { PageTransition } from "../../_components/PageTransition";
 import { admitScannedTicket } from "./actions";
@@ -133,6 +134,7 @@ export default async function VerifyTicketPage({
     <PageTransition>
       <main className="section theme-light">
         <div className="container container-narrow stack-lg">
+          {event.is_demo && <DemoBanner />}
           {profile && message && (
             <p className={`verify-outcome ${result === "admitted" ? "verify-outcome-ok" : "verify-outcome-bad"}`} role="alert">
               {message}

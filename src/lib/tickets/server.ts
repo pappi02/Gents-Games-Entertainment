@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { formatEventDate } from "@/lib/public/format";
 import { hashIp, orderLinkToken, parseTicketToken, signTicket, ticketingSecretsConfigured, verifyTicketSignature } from "./crypto";
+import { demoModeEnabled } from "./demo";
 import { sendTicketEmail } from "./email";
 import { paystackConfigured, verifyTransaction } from "./paystack";
 
@@ -49,15 +50,25 @@ export type EventSummary = {
   timezone: string;
   location_note: string | null;
   cancelled_at: string | null;
+  is_demo: boolean;
 };
 
 export function siteUrl() {
+  // A preview's QR codes must scan back to that preview, not to the real site.
+  if (demoModeEnabled() && process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL) {
+    return `https://${process.env.VERCEL_BRANCH_URL}`;
+  }
   return (process.env.NEXT_SITE_URL ?? "http://localhost:3000").replace(/\/+$/, "");
 }
 
 /** Selling needs every piece in place; otherwise the site says sales are closed rather than failing at payment. */
 export function ticketingReady() {
   return Boolean(ticketingSecretsConfigured() && paystackConfigured() && process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
+/** Sample events need no payment provider, but still need real signing keys and the server database key. */
+export function demoTicketingReady() {
+  return Boolean(demoModeEnabled() && ticketingSecretsConfigured() && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
 export function orderLink(orderId: string) {
@@ -102,7 +113,7 @@ export async function getOrder(orderId: string) {
 export async function getOrderEvent(eventId: string) {
   const { data } = await createAdminClient()
     .from("events")
-    .select("id, title, slug, start_at, end_at, timezone, location_note, cancelled_at")
+    .select("id, title, slug, start_at, end_at, timezone, location_note, cancelled_at, is_demo")
     .eq("id", eventId)
     .maybeSingle();
   return (data as EventSummary | null) ?? null;
@@ -132,6 +143,8 @@ export async function deliverTickets(orderId: string) {
   if (!order || order.status !== "paid") return "Order isn't paid.";
   const event = await getOrderEvent(order.event_id);
   if (!event) return "Event not found.";
+  // Never email from a demo, even if a real address was typed.
+  if (event.is_demo) return "Demo mode: no email sent.";
   const when = formatEventDate(event.start_at, event.timezone);
   const error = await sendTicketEmail({
     to: order.buyer_email,

@@ -14,9 +14,10 @@ type Props = {
   unitPrice: number;
   currency: string;
   maxQuantity: number;
+  isDemo?: boolean;
 };
 
-export function TicketPurchaseForm({ slug, ticketTypeId, ticketName, unitPrice, currency, maxQuantity }: Props) {
+export function TicketPurchaseForm({ slug, ticketTypeId, ticketName, unitPrice, currency, maxQuantity, isDemo = false }: Props) {
   const [state, formAction, pending] = useActionState(startTicketCheckout, initialState);
   const [quantity, setQuantity] = useState(1);
   const [name, setName] = useState("");
@@ -213,7 +214,11 @@ export function TicketPurchaseForm({ slug, ticketTypeId, ticketName, unitPrice, 
           {pending && <span className="spinner" aria-hidden="true" />}
           {pending ? "Holding your tickets…" : "Continue to payment"}
         </button>
-        <p className="subtle">Pay securely with M-Pesa or card on Paystack. Tickets are held for 15 minutes.</p>
+        <p className="subtle">
+          {isDemo
+            ? "Sample event: the next step is a simulated payment and no money moves."
+            : "Pay securely with M-Pesa or card on Paystack. Tickets are held for 15 minutes."}
+        </p>
       </div>
       <p className="visually-hidden" aria-live="polite">
         {pending ? "Holding your tickets" : ""}

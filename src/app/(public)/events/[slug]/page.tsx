@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getEventBySlug, getVenueSettings } from "@/lib/public/queries";
 import { formatEventDate, formatMoney, hasEnded } from "@/lib/public/format";
-import { eventPosterUrl, getTicketAvailability, SALE_STATE_LABEL } from "@/lib/public/tickets";
+import { eventPosterUrl, getDemoEvents, getTicketAvailability, SALE_STATE_LABEL } from "@/lib/public/tickets";
+import { DemoBanner } from "../../_components/DemoBanner";
 import { Breadcrumbs } from "../../_components/Breadcrumbs";
 import { ContactActions } from "../../_components/ContactActions";
 import { Icon } from "../../_components/Icon";
@@ -25,10 +26,16 @@ const SALE_STATE_NOTE = {
     "All remaining tickets are held by buyers at checkout. Any that aren't paid for are released within 15 minutes, so please check back.",
 } as const;
 
+/** Real events first. A sample event can only be found when demo mode is on. */
+async function findEvent(slug: string) {
+  return (await getEventBySlug(slug)) ?? (await getDemoEvents()).find((e) => e.slug === slug) ?? null;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const event = await getEventBySlug(slug);
+  const event = await findEvent(slug);
   if (!event) return { title: "Event not found", robots: { index: false } };
+  if (event.is_demo) return { title: event.title, robots: { index: false, follow: false } };
   const title = event.seo_title ?? event.title;
   const description = event.seo_description ?? String(event.description).slice(0, 160);
   return {
@@ -41,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [event, venue] = await Promise.all([getEventBySlug(slug), getVenueSettings()]);
+  const [event, venue] = await Promise.all([findEvent(slug), getVenueSettings()]);
   if (!event) notFound();
 
   const [ticket] = await getTicketAvailability(event.id);
@@ -80,13 +87,16 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   return (
     <PageTransition>
       <main>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+        {!event.is_demo && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+        )}
         <section className="detail-hero theme-light">
           <div className="container container-narrow">
             <Breadcrumbs
               items={[{ href: "/", label: "Home" }, { href: "/events", label: "Events" }, { label: event.title }]}
             />
             <div className="stack-lg event-detail">
+              {event.is_demo && <DemoBanner />}
               <p className="eyebrow">{cancelled ? "Cancelled event" : finished ? "Past event" : "Upcoming event"}</p>
               <h1 className="display display-xl">{event.title}</h1>
               {event.poster_path && (
@@ -134,6 +144,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                       unitPrice={ticket.price_minor_units}
                       currency={ticket.currency}
                       maxQuantity={ticket.can_buy}
+                      isDemo={Boolean(event.is_demo)}
                     />
                   ) : (
                     <p className={`ticket-state ticket-state-${ticket.state}`}>

@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       // Admin is also independently authenticated (docs/SECURITY.md §2) —
       // this disallow is a courtesy to crawlers, not the security boundary.
       // Ticket and verify URLs carry private tokens. They also send noindex.
-      disallow: ["/admin", "/tickets", "/verify", "/api"],
+      disallow: ["/admin", "/tickets", "/verify", "/api", "/demo", "/demo-pay"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

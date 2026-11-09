@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFImage, type PDFPage } from "pdf-lib";
+import { PDFDocument, StandardFonts, degrees, rgb, type PDFFont, type PDFImage, type PDFPage } from "pdf-lib";
 import QRCode from "qrcode";
 import { signatureFingerprint } from "./crypto";
 
@@ -15,6 +15,8 @@ export type PdfTicket = {
   verifyUrl: string;
   /** The signed token inside verifyUrl, used for the printed fingerprint. */
   token: string;
+  /** Sample tickets are visibly marked as not valid for entry. */
+  sample?: boolean;
 };
 
 const INK = rgb(0.078, 0.078, 0.078);
@@ -169,6 +171,13 @@ export async function buildTicketPdf(tickets: PdfTicket[]): Promise<Uint8Array> 
     }
 
     page.drawRectangle({ x: 0, y: 0, width: WIDTH, height: 6, color: RED });
+
+    if (ticket.sample) {
+      const banner = "SAMPLE TICKET - NOT VALID FOR ENTRY";
+      page.drawRectangle({ x: 0, y: 6, width: WIDTH, height: 24, color: RED });
+      page.drawText(banner, { x: (WIDTH - bold.widthOfTextAtSize(banner, 11)) / 2, y: 14, size: 11, font: bold, color: PAPER });
+      page.drawText("SAMPLE", { x: 62, y: 170, size: 96, font: bold, color: RED, opacity: 0.14, rotate: degrees(45) });
+    }
   }
 
   return pdf.save();
