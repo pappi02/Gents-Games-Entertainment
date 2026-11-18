@@ -21,7 +21,7 @@ import { CategoryGameName } from "./_components/CategoryGameName";
 import { GamePicker, type PickerGame } from "./_components/GamePicker";
 import { PageTransition } from "./_components/PageTransition";
 import { Icon } from "./_components/Icon";
-import venuePoolRoom from "@/assets/venue-pool-room.webp";
+import venuePoolRoom from "@/assets/venue/pool-table-lounge.webp";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -133,7 +133,7 @@ export default async function HomePage() {
               <div className="media main">
                 <Image
                   src={venuePoolRoom}
-                  alt="The pool table at The Gents, set in the lounge with high-backed chairs and sofas."
+                  alt="The pool table at The Gents, set in the lounge with gold throne chairs and sofas."
                   fill
                   priority
                   placeholder="blur"

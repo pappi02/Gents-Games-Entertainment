@@ -7,7 +7,12 @@ import { primaryImage } from "@/lib/public/media";
 import { PageIntro } from "../_components/PageIntro";
 import { CategoryGameName } from "../_components/CategoryGameName";
 import { Icon } from "../_components/Icon";
-import venuePoolRoom from "@/assets/venue-pool-room.webp";
+import loungeWide from "@/assets/venue/lounge-pool-wide-landscape.webp";
+import loungeThroneWide from "@/assets/venue/lounge-pool-throne-wide.webp";
+import throneChairs from "@/assets/venue/throne-chairs-lounge-decanter.webp";
+import loungeSofa from "@/assets/venue/lounge-sofa-throne-chairs.webp";
+import poolFireplace from "@/assets/venue/pool-table-fireplace-lounge.webp";
+import poolWindow from "@/assets/venue/pool-table-window-mirror.webp";
 import { PageTransition } from "../_components/PageTransition";
 
 export const metadata: Metadata = {
@@ -17,6 +22,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/venue" },
   openGraph: pageOpenGraph("The Venue", "/venue"),
 };
+
+// Real photographs of the venue (owner, November 2026), shown ahead of the
+// catalogue's game shots. Lead image first; the gallery grid gives it 2x2.
+const venueShots = [
+  { src: loungeThroneWide, alt: "The full lounge: the pool table, gold throne chairs and a white coffee table.", caption: "The lounge" },
+  { src: throneChairs, alt: "Gold-trimmed throne chairs beside the sofa, with a decanter set on the coffee table.", caption: "Throne chairs" },
+  { src: poolFireplace, alt: "The pool table racked and ready, with the fireplace wall and pink orchids behind.", caption: "By the fireplace" },
+  { src: poolWindow, alt: "The pool table by the windows, with a tall plant and an arched mirror.", caption: "Window side" },
+  { src: loungeSofa, alt: "A light sofa and throne chairs on the parquet floor of the lounge.", caption: "Seating" },
+];
 
 export default async function VenuePage() {
   const [categories, games, venue] = await Promise.all([
@@ -33,7 +48,7 @@ export default async function VenuePage() {
     .filter((x): x is { game: (typeof games)[number]; image: NonNullable<ReturnType<typeof primaryImage>> } =>
       Boolean(x.image),
     )
-    .slice(0, 4);
+    .slice(0, 3);
 
   return (
     <PageTransition>
@@ -70,17 +85,27 @@ export default async function VenuePage() {
                 <figure>
                   <div className="media">
                     <Image
-                      src={venuePoolRoom}
+                      src={loungeWide}
                       placeholder="blur"
-                      alt="The pool table in the lounge at the venue, with high-backed chairs and sofas behind it."
+                      alt="The lounge at the venue: the pool table, sofas, the fireplace wall and the staircase behind."
                       fill
                       priority
                       sizes="(max-width: 899px) 100vw, 50vw"
                     />
                   </div>
-                  <figcaption>The lounge</figcaption>
+                  <figcaption>The games lounge</figcaption>
                 </figure>
               </li>
+              {venueShots.map((shot) => (
+                <li key={shot.caption}>
+                  <figure>
+                    <div className="media">
+                      <Image src={shot.src} placeholder="blur" alt={shot.alt} fill sizes="(max-width: 899px) 50vw, 25vw" />
+                    </div>
+                    <figcaption>{shot.caption}</figcaption>
+                  </figure>
+                </li>
+              ))}
               {gameShots.map(({ game, image }) => (
                 <li key={game.id}>
                   <figure>

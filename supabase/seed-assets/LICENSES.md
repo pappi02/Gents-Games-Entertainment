@@ -46,3 +46,15 @@ Real photos taken at the venue and supplied by the owner (`venue/` subfolder). S
 | `venue/chess-board-side.webp` | Chess — third |
 
 **Retired** with this batch (deleted from the repo; Storage objects replaced by `scripts/seed-media.mjs pool chess`): `owner-provided/pool-room.webp`, `owner-provided/pool-bar.webp`, `owner-provided/chess-lounge.webp`, `owner-provided/chess-room.webp`, `src/assets/venue-lounge.webp`.
+
+## Enhanced venue photography (November 2026)
+
+The six photos above were replaced by enhanced versions of the same shots (`venue/*-enhanced.webp`): upscaled,
+colour-corrected and, on `pool-table-enhanced.webp`, with party balloons removed from the mirror. Nothing was added
+to the rooms, so they stay `is_placeholder = false`. New file names so cached copies are not served. Apply to Storage
+with `node scripts/seed-media.mjs pool chess`.
+
+More real lounge photos from the same shoot ship as static assets in `src/assets/venue/` (home hero, `/venue`
+gallery, `/membership`). Edits there: Christmas trees replaced by potted plants, a decanter set placed on the coffee
+table, people in the far background removed, colour and resolution improved. Furniture and layout are unchanged.
+`src/assets/venue-pool-room.webp` was retired.

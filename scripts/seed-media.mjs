@@ -49,17 +49,17 @@ const GAMES = [
   {
     gameSlug: "pool",
     images: [
-      { file: "venue/pool-table.webp", alt: "The pool table at the venue, racked and ready with two cues on the cloth.", note: VENUE_NOTE, real: true },
-      { file: "venue/pool-rack.webp", alt: "A full rack of pool balls in the triangle, with cues resting on the table.", note: VENUE_NOTE, real: true },
-      { file: "venue/pool-table-lounge.webp", alt: "The pool table in the lounge, with high-backed chairs and sofas behind it.", note: VENUE_NOTE, real: true },
+      { file: "venue/pool-table-enhanced.webp", alt: "The pool table at the venue, racked and ready with two cues on the cloth.", note: VENUE_NOTE, real: true },
+      { file: "venue/pool-rack-enhanced.webp", alt: "A full rack of pool balls in the triangle, with cues resting on the table.", note: VENUE_NOTE, real: true },
+      { file: "venue/pool-table-lounge-enhanced.webp", alt: "The pool table in the lounge, with high-backed chairs and sofas behind it.", note: VENUE_NOTE, real: true },
     ],
   },
   {
     gameSlug: "chess",
     images: [
-      { file: "venue/chess-board.webp", alt: "A chess set laid out for a new game on a round lounge table.", note: VENUE_NOTE, real: true },
-      { file: "venue/chess-lounge-table.webp", alt: "A chess board set up on a marble side table beside a lounge chair.", note: VENUE_NOTE, real: true },
-      { file: "venue/chess-board-side.webp", alt: "A chess set ready to play, seen from the side of the board.", note: VENUE_NOTE, real: true },
+      { file: "venue/chess-board-enhanced.webp", alt: "A chess set laid out for a new game on a round lounge table.", note: VENUE_NOTE, real: true },
+      { file: "venue/chess-lounge-table-enhanced.webp", alt: "A chess board set up on a marble side table beside a lounge chair.", note: VENUE_NOTE, real: true },
+      { file: "venue/chess-board-side-enhanced.webp", alt: "A chess set ready to play, seen from the side of the board.", note: VENUE_NOTE, real: true },
     ],
   },
   {
