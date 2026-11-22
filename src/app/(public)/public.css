@@ -1560,18 +1560,28 @@ ul.panel-grid > li > .panel { height: 100%; }
 
 .detail-section p { max-width: var(--prose-max); white-space: pre-line; }
 
-.game-clip video {
+.clip-strip {
+  --clip-h: clamp(15rem, 52vw, 22rem);
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-2);
+  list-style: none;
+  scrollbar-width: thin;
+}
+.clip { flex: none; scroll-snap-align: start; }
+.clip video {
   display: block;
-  width: 100%;
-  height: auto;
+  height: var(--clip-h);
   border-radius: var(--radius-sm);
   background: var(--surface-raised);
+  object-fit: cover;
 }
-.game-clip--landscape { max-width: 42rem; }
-.game-clip--landscape video { aspect-ratio: 16 / 9; }
-.game-clip--portrait { max-width: 20rem; }
-.game-clip--portrait video { aspect-ratio: 9 / 16; }
-.game-clip figcaption { margin-top: var(--space-2); font-size: var(--step--1); color: var(--text-muted); }
+.clip--portrait video { aspect-ratio: 9 / 16; }
+.clip--landscape video { aspect-ratio: 16 / 9; max-width: calc(100vw - 3rem); }
+.clip figcaption { margin-top: var(--space-2); font-size: var(--step--1); color: var(--text-muted); }
+.detail-gallery .clip-strip { --clip-h: clamp(13rem, 40vw, 17rem); margin-top: var(--space-4); }
 
 .price-table {
   width: 100%;

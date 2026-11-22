@@ -21,6 +21,8 @@ import { CategoryGameName } from "./_components/CategoryGameName";
 import { GamePicker, type PickerGame } from "./_components/GamePicker";
 import { PageTransition } from "./_components/PageTransition";
 import { Icon } from "./_components/Icon";
+import { ClipStrip } from "./_components/ClipStrip";
+import { homeClips } from "@/lib/public/game-clips";
 import venuePoolRoom from "@/assets/venue/pool-table-lounge.webp";
 
 export const metadata: Metadata = {
@@ -207,6 +209,24 @@ export default async function HomePage() {
             </div>
           </div>
         )}
+
+        {/* ── Gameplay clips filmed at the venue ── */}
+        <section className="section theme-paper" aria-labelledby="in-play-title">
+          <div className="container">
+            <div className="section-head reveal">
+              <div>
+                <p className="eyebrow">Filmed at the venue</p>
+                <h2 id="in-play-title" className="display display-lg">
+                  See it <span className="accent-serif">in play</span>
+                </h2>
+              </div>
+              <Link href="/venue" className="arrow-link">
+                See the venue <Icon name="arrowRight" />
+              </Link>
+            </div>
+            <ClipStrip clips={homeClips} label="Short clips of games at the venue" />
+          </div>
+        </section>
 
         {/* ── Categories ── */}
         {categories.length > 0 && (

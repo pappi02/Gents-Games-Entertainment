@@ -17,6 +17,13 @@ import gardenLawn from "@/assets/venue/garden-lawn-house.webp";
 import gardenDining from "@/assets/venue/garden-dining-umbrella-wide.webp";
 import gardenBarrelBar from "@/assets/venue/garden-barrel-bar.webp";
 import verandaLounge from "@/assets/venue/veranda-lounge-sofa.webp";
+import gardenThroughTrees from "@/assets/venue/garden-house-through-trees.webp";
+import gardenTable from "@/assets/venue/garden-dining-umbrella.webp";
+import barrelBarSide from "@/assets/venue/garden-barrel-bar-side.webp";
+import grill from "@/assets/venue/grill-garden-bar-behind.webp";
+import verandaWide from "@/assets/venue/veranda-lounge-wide.webp";
+import { ClipStrip } from "../_components/ClipStrip";
+import { venueClips } from "@/lib/public/game-clips";
 import { PageTransition } from "../_components/PageTransition";
 
 export const metadata: Metadata = {
@@ -40,6 +47,11 @@ const venueShots = [
   { src: gardenDining, alt: "Dining tables under umbrellas on the lawn, shaded by tall trees.", caption: "Garden tables" },
   { src: gardenBarrelBar, alt: "A barrel bar table with high stools under an umbrella on the lawn.", caption: "Barrel bar" },
   { src: verandaLounge, alt: "The covered veranda: a sofa, woven chairs and a wooden table against a floral wall.", caption: "The veranda" },
+  { src: gardenThroughTrees, alt: "The house seen across the lawn through tall trees.", caption: "Under the trees" },
+  { src: gardenTable, alt: "A round wooden table and chairs under a garden umbrella.", caption: "A table outside" },
+  { src: barrelBarSide, alt: "The barrel bar under its umbrella, with the house and veranda behind.", caption: "By the bar" },
+  { src: grill, alt: "The barrel grill in the garden, with the barrel bar behind it.", caption: "The grill" },
+  { src: verandaWide, alt: "The covered veranda lounge under the floral walls.", caption: "Veranda lounge" },
 ];
 
 export default async function VenuePage() {
@@ -57,7 +69,8 @@ export default async function VenuePage() {
     .filter((x): x is { game: (typeof games)[number]; image: NonNullable<ReturnType<typeof primaryImage>> } =>
       Boolean(x.image),
     )
-    .slice(0, 3);
+    // 5 lounge + 9 outdoor + 2 game shots keeps the 4-column grid even.
+    .slice(0, 2);
 
   return (
     <PageTransition>
@@ -134,8 +147,22 @@ export default async function VenuePage() {
           </div>
         </section>
 
+        <section className="section theme-paper" aria-labelledby="venue-clips-title">
+          <div className="container">
+            <div className="section-head reveal">
+              <div>
+                <p className="eyebrow">Filmed on site</p>
+                <h2 id="venue-clips-title" className="display display-lg">
+                  Take a look around
+                </h2>
+              </div>
+            </div>
+            <ClipStrip clips={venueClips} label="Short clips of the venue" />
+          </div>
+        </section>
+
         {categories.length > 0 && (
-          <section className="section theme-paper" aria-labelledby="available-title">
+          <section className="section theme-light" aria-labelledby="available-title">
             <div className="container split split-top">
               <div className="stack">
                 <p className="eyebrow">On site</p>
