@@ -1,12 +1,12 @@
 -- Badminton on the garden lawn, confirmed by the owner (22 November 2026,
--- with footage of games on the lawn), and the Outdoor & Leisure category
--- published so it has somewhere to live.
+-- with footage of games on the lawn), in the Outdoor & Leisure category.
 --
 -- Facility-accuracy rule (docs/CLAUDE.md): Badminton is published and
--- 'available' because the owner confirmed it. The category's other games
--- (mini golf, swimming pool) stay draft + unverified, so the public site
--- still hides them; the category description is rewritten to describe only
--- what is confirmed. No pricing: prices stay enquiry-only.
+-- 'available' because the owner confirmed it. No pricing: prices stay
+-- enquiry-only. In production the category was already published (admin),
+-- with Mini Golf and Swimming Pool listed as coming soon, so the category
+-- update below is a no-op there; it only applies to a fresh database where
+-- the category is still a draft.
 --
 -- Photos are seeded separately: node scripts/seed-media.mjs badminton darts
 --
