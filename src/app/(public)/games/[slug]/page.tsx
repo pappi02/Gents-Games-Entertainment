@@ -16,6 +16,8 @@ import { StatusBadge } from "../../_components/StatusBadge";
 import { Breadcrumbs } from "../../_components/Breadcrumbs";
 import { ContactActions } from "../../_components/ContactActions";
 import { Icon } from "../../_components/Icon";
+import { LoopVideo } from "../../_components/LoopVideo";
+import { gameClips } from "@/lib/public/game-clips";
 
 // NOTE: `instant` is a dev-time navigation-validation toggle, not a
 // rendering-mode switch (confirmed against Next's own docs) — it does NOT
@@ -67,6 +69,7 @@ export default async function GameDetailPage({ params }: { params: Promise<{ slu
   const [main, ...rest] = images;
   const pricing = (game.pricing_options as PricingOption[] | null) ?? [];
   const status = facilityStatus(game.facility_status);
+  const clip = gameClips[game.slug];
 
   const [related, venue] = await Promise.all([getRelatedGames(category?.id ?? null, game.id), getVenueSettings()]);
 
@@ -183,6 +186,16 @@ export default async function GameDetailPage({ params }: { params: Promise<{ slu
                 <div className="detail-section">
                   <h2>New to this?</h2>
                   <p>{game.beginner_notes}</p>
+                </div>
+              )}
+
+              {clip && (
+                <div className="detail-section">
+                  <h2>At the venue</h2>
+                  <figure className={`game-clip game-clip--${clip.orientation}`}>
+                    <LoopVideo src={clip.src} poster={clip.poster} label={clip.label} />
+                    <figcaption>Filmed here at the venue.</figcaption>
+                  </figure>
                 </div>
               )}
             </div>

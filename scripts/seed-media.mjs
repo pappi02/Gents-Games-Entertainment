@@ -40,6 +40,7 @@ const admin = createClient(env.NEXT_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY,
 const OWNER_NOTE =
   "Provided directly by the business owner — provenance/license not independently verified. See supabase/seed-assets/LICENSES.md.";
 const VENUE_NOTE = "Photographed at the venue, supplied by the business owner (October 2026).";
+const VENUE_NOV_NOTE = "Still from the owner's own footage at the venue (November 2026), colour-graded only. The people shown agreed to appear.";
 const COMMONS_NOTE = "Wikimedia Commons, free license — see supabase/seed-assets/LICENSES.md.";
 
 const GAMES = [
@@ -76,7 +77,18 @@ const GAMES = [
   },
   {
     gameSlug: "darts",
-    images: [{ file: "darts.webp", alt: "Darts embedded in a dartboard.", note: COMMONS_NOTE }],
+    images: [
+      { file: "venue/darts-board-venue.webp", alt: "The dartboard on the stone wall at the venue, with two darts in it.", note: VENUE_NOV_NOTE, real: true },
+      { file: "venue/darts-pulling-darts.webp", alt: "A player pulling darts out of the board after a round.", note: VENUE_NOV_NOTE, real: true },
+      { file: "venue/darts-board-wall.webp", alt: "The dartboard on the wall of the covered walkway, beside a potted plant.", note: VENUE_NOV_NOTE, real: true },
+    ],
+  },
+  {
+    gameSlug: "badminton",
+    images: [
+      { file: "venue/badminton-lawn.webp", alt: "Two players in a badminton rally on the garden lawn, with the veranda behind.", note: VENUE_NOV_NOTE, real: true },
+      { file: "venue/badminton-rally.webp", alt: "A badminton game on the lawn beside the house, guests watching from the veranda.", note: VENUE_NOV_NOTE, real: true },
+    ],
   },
   // October 2026 leisure / entertainment / casino-style additions. These games
   // are draft + unverified, so the images stay private (game_media RLS only

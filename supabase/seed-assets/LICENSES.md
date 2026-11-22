@@ -4,7 +4,6 @@ Stock photos used to seed the catalogue at launch (per [docs/PHASE_0_DISCOVERY.m
 
 | File | Game | Source | License | Attribution |
 |---|---|---|---|---|
-| `darts.webp` | Darts | [Darts in a dartboard.jpg](https://commons.wikimedia.org/wiki/File:Darts_in_a_dartboard.jpg) | Public domain | PeterPan23 |
 | `mini-golf.webp` | Mini Golf *(draft)* | [15-21-202, miniature golf - panoramio.jpg](https://commons.wikimedia.org/wiki/File:15-21-202,_miniature_golf_-_panoramio.jpg) | CC BY-SA 3.0 | David Dugan |
 | `swimming-pool.webp` | Swimming Pool *(draft)* | [Swimming pool at Hotel Terra Barichara.jpg](https://commons.wikimedia.org/wiki/File:Swimming_pool_at_Hotel_Terra_Barichara.jpg) | CC BY-SA 4.0 | Bernard Gagnon |
 | `live-band-salsa.webp` | Live Band & Salsa Dancers *(draft)* — primary | [Salsa band and salsa dancing - Fatacil … (1469449571).jpg](https://commons.wikimedia.org/wiki/File:Salsa_band_and_salsa_dancing_-_Fatacil_Agriculture_and_Tourism_Fair_-_Lagoa_-_The_Algarve,_Portugal_(1469449571).jpg) | CC BY 2.0 | Glen Bowman |
@@ -30,7 +29,7 @@ The business owner supplied 7 additional images directly (`owner-provided/` subf
 
 **Provenance/license not independently verified.** These were provided directly rather than sourced with a documented license trail the way the Wikimedia images above were. Several have the visual characteristics of AI-generated interior renders or stock/catalog photography (e.g. a furniture retailer's product listing), which commonly carry usage restrictions even when freely viewable. **Before any public launch, confirm the owner has the right to use these commercially** — either they were generated/taken by the owner (no issue), licensed from a stock provider with a commercial license, or otherwise cleared. `media_assets.license_note` on each of these rows flags this explicitly so it surfaces in the admin media view, not just here.
 
-Darts intentionally kept its existing Wikimedia photo (`darts.webp`) — no replacement was supplied, and the existing one already matches the visual quality bar.
+Darts kept its Wikimedia photo (`darts.webp`) until November 2026, when real venue stills replaced it (see below).
 
 ## Venue photography (October 2026)
 
@@ -58,3 +57,21 @@ More real lounge photos from the same shoot ship as static assets in `src/assets
 gallery, `/membership`). Edits there: Christmas trees replaced by potted plants, a decanter set placed on the coffee
 table, people in the far background removed, colour and resolution improved. Furniture and layout are unchanged.
 `src/assets/venue-pool-room.webp` was retired.
+
+## Darts and badminton at the venue (November 2026)
+
+Stills from the owner's own footage of the venue, colour-graded only (nothing added or removed). The people shown
+agreed to appear. Seeded with `is_placeholder = false`. Apply with `node scripts/seed-media.mjs darts badminton`
+(after the `20261122120000_badminton_outdoor_leisure` migration, which creates the Badminton record).
+
+| File | Used for |
+|---|---|
+| `venue/darts-board-venue.webp` | Darts — primary |
+| `venue/darts-pulling-darts.webp` | Darts — secondary |
+| `venue/darts-board-wall.webp` | Darts — third |
+| `venue/badminton-lawn.webp` | Badminton — primary |
+| `venue/badminton-rally.webp` | Badminton — secondary |
+
+`darts.webp` (Wikimedia, public domain, PeterPan23) was retired and deleted. Short silent gameplay clips from the same
+footage ship as static files in `public/videos/` (see `src/lib/public/game-clips.ts`). Garden and veranda photos
+from the same visit (`src/assets/venue/garden-*`, `veranda-*`) are colour-graded only and appear on `/venue`.

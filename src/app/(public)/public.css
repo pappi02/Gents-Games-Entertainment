@@ -1560,6 +1560,19 @@ ul.panel-grid > li > .panel { height: 100%; }
 
 .detail-section p { max-width: var(--prose-max); white-space: pre-line; }
 
+.game-clip video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+.game-clip--landscape { max-width: 42rem; }
+.game-clip--landscape video { aspect-ratio: 16 / 9; }
+.game-clip--portrait { max-width: 20rem; }
+.game-clip--portrait video { aspect-ratio: 9 / 16; }
+.game-clip figcaption { margin-top: var(--space-2); font-size: var(--step--1); color: var(--text-muted); }
+
 .price-table {
   width: 100%;
   border-collapse: collapse;

@@ -13,6 +13,10 @@ import throneChairs from "@/assets/venue/throne-chairs-lounge-decanter.webp";
 import loungeSofa from "@/assets/venue/lounge-sofa-throne-chairs.webp";
 import poolFireplace from "@/assets/venue/pool-table-fireplace-lounge.webp";
 import poolWindow from "@/assets/venue/pool-table-window-mirror.webp";
+import gardenLawn from "@/assets/venue/garden-lawn-house.webp";
+import gardenDining from "@/assets/venue/garden-dining-umbrella-wide.webp";
+import gardenBarrelBar from "@/assets/venue/garden-barrel-bar.webp";
+import verandaLounge from "@/assets/venue/veranda-lounge-sofa.webp";
 import { PageTransition } from "../_components/PageTransition";
 
 export const metadata: Metadata = {
@@ -31,6 +35,11 @@ const venueShots = [
   { src: poolFireplace, alt: "The pool table racked and ready, with the fireplace wall and pink orchids behind.", caption: "By the fireplace" },
   { src: poolWindow, alt: "The pool table by the windows, with a tall plant and an arched mirror.", caption: "Window side" },
   { src: loungeSofa, alt: "A light sofa and throne chairs on the parquet floor of the lounge.", caption: "Seating" },
+  // Outside: the garden and veranda (owner, November 2026; colour-graded only).
+  { src: gardenLawn, alt: "The garden lawn in the sun, with the house and veranda behind.", caption: "The garden" },
+  { src: gardenDining, alt: "Dining tables under umbrellas on the lawn, shaded by tall trees.", caption: "Garden tables" },
+  { src: gardenBarrelBar, alt: "A barrel bar table with high stools under an umbrella on the lawn.", caption: "Barrel bar" },
+  { src: verandaLounge, alt: "The covered veranda: a sofa, woven chairs and a wooden table against a floral wall.", caption: "The veranda" },
 ];
 
 export default async function VenuePage() {
