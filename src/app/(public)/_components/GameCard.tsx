@@ -6,7 +6,8 @@ import type { PublicGameCard } from "@/lib/public/queries";
 import { StatusBadge } from "./StatusBadge";
 import { Icon } from "./Icon";
 
-export const CARD_IMAGE_SIZES = "(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 400px";
+// Two to a row on phones (public.css), so half the width there too.
+export const CARD_IMAGE_SIZES = "(max-width: 1000px) 50vw, 400px";
 const SPOTLIGHT_IMAGE_SIZES = "(max-width: 899px) 100vw, 60vw";
 
 /** Shared view-transition name so a card's photo morphs into the detail page hero. */

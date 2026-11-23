@@ -823,6 +823,44 @@ figcaption {
   transform: translateX(3px);
 }
 
+/* Phones: two cards to a row in the catalogue and "You might also like", so
+   the list isn't a long single file of full-width photos. Descriptions keep to
+   two lines; the full text is on each game's page. */
+@media (max-width: 599px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+  .card-grid .game-card-body {
+    gap: var(--space-1);
+    padding: var(--space-3);
+  }
+  .card-grid .game-card-category {
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+  }
+  .card-grid .game-card-title { font-size: var(--step-1); }
+  .card-grid .game-card-desc {
+    flex: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .card-grid .game-card-foot {
+    margin-top: auto;
+    padding-top: var(--space-2);
+  }
+  .card-grid .status { font-size: 0.625rem; letter-spacing: 0.04em; }
+  .card-grid .game-card-foot svg.chevron { width: 16px; height: 16px; }
+  .card-grid .media-tag {
+    left: var(--space-2);
+    bottom: var(--space-2);
+    font-size: 0.56rem;
+  }
+}
+
 /* ── Home: hero ─────────────────────────────────────────────────────────── */
 
 .home-hero {
@@ -2004,6 +2042,11 @@ select.input {
     flex: 1;
     min-height: 260px;
   }
+
+  /* The spotlight is as tall as the two cards beside it, so shorter photos on
+     those cards keep the whole set (and the spotlight photo) from towering. */
+  .feature-grid .game-card:not(.game-card--spotlight) .media.ratio-4x3 { aspect-ratio: 2 / 1; }
+  .game-card--spotlight .game-card-body { padding: var(--space-4) var(--space-5) var(--space-5); }
 }
 
 /* ── Play together ──────────────────────────────────────────────────────── */
